@@ -1,0 +1,26 @@
+<svg width="400" height="120" viewBox="0 0 400 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 3D Printer/Lab Equipment Icon -->
+  <g transform="translate(10, 20)">
+    <!-- Main frame/stand -->
+    <rect x="0" y="50" width="80" height="12" fill="#A8C5E0" rx="6"/>
+    <rect x="5" y="15" width="8" height="50" fill="#A8C5E0" rx="4"/>
+    <rect x="67" y="15" width="8" height="50" fill="#A8C5E0" rx="4"/>
+    <rect x="5" y="15" width="70" height="8" fill="#A8C5E0" rx="4"/>
+    
+    <!-- Print bed/platform -->
+    <rect x="15" y="35" width="50" height="6" fill="#FF5D05" rx="3"/>
+    
+    <!-- Extruder/tool head -->
+    <ellipse cx="40" cy="25" rx="8" ry="6" fill="#FF5D05"/>
+    <circle cx="40" cy="25" r="3" fill="#4A9EFF"/>
+    
+    <!-- Support elements -->
+    <rect x="20" y="42" width="40" height="3" fill="#FFD700" rx="1.5"/>
+  </g>
+  
+  <!-- "Think" text -->
+  <text x="110" y="45" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="#FF5D05">Think</text>
+  
+  <!-- "Craft Lab" text -->
+  <text x="110" y="85" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="#4A9EFF">Craft Lab</text>
+</svg>

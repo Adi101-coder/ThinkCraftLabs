@@ -1,0 +1,98 @@
+/* ThreePanelShowcase CSS Module */
+
+:root {
+  --showcase-border-radius: 28px;
+  --showcase-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  --showcase-inner-border: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  --showcase-transition: cubic-bezier(0.2, 0.9, 0.2, 1);
+}
+
+.showcaseCard {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.7s var(--showcase-transition);
+  will-change: transform, opacity;
+  border-radius: var(--showcase-border-radius);
+  box-shadow: var(--showcase-shadow), var(--showcase-inner-border);
+}
+
+.showcaseCard:hover {
+  box-shadow: 
+    0 8px 40px rgba(0, 0, 0, 0.15),
+    var(--showcase-inner-border);
+}
+
+.showcaseCard:focus {
+  outline: none;
+  box-shadow: 
+    var(--showcase-shadow),
+    var(--showcase-inner-border),
+    0 0 0 2px rgba(59, 130, 246, 0.5);
+}
+
+.showcaseMedia {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--showcase-border-radius);
+}
+
+.showcaseCaption {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  z-index: 10;
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.showcaseOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.3) 0%,
+    transparent 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+  border-radius: var(--showcase-border-radius);
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .showcaseCard {
+    /* Disable tilt on mobile for performance */
+    transform: none !important;
+  }
+  
+  .showcaseCaption {
+    font-size: 1.125rem;
+    bottom: 1rem;
+    left: 1rem;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .showcaseCard {
+    transition: opacity 0.3s ease;
+    transform: none !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .showcaseCard {
+    border: 2px solid currentColor;
+  }
+  
+  .showcaseCaption {
+    background: rgba(0, 0, 0, 0.8);
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+  }
+}

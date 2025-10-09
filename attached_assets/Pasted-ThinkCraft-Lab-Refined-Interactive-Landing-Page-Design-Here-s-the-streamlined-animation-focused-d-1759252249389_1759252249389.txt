@@ -1,0 +1,247 @@
+ThinkCraft Lab - Refined Interactive Landing Page Design
+Here's the streamlined, animation-focused design based on your specifications:
+
+PRELOADER (Full screen, 2-3 seconds)
+
+Solid orange background (#FF6B00)
+"ThinkCraft" in large white bold typography, centered
+Simple fade in of the text
+Optional: Subtle loading bar beneath (white, thin line)
+Smooth fade to white as it transitions to main page
+
+
+NAVIGATION (Floating, Minimalist)
+
+Thin horizontal bar floating at top with slight margin
+Semi-transparent white background with blur
+Logo on left (small, compact)
+Links on right: Home | Shop | Work | About Us | Contact
+Very minimal, clean typography
+Links have subtle orange underline on hover
+Disappears on scroll down, reappears on scroll up
+
+
+HERO SECTION (Full viewport, Bold Typographic)
+Editorial/Swiss Typography Style:
+        TRANSFORMING IDEAS
+
+              INTO REALITY
+
+    THROUGH INNOVATIVE
+
+         DESIGN & 3D PRINTING
+
+Large, bold sans-serif typography (think Helvetica, Swiss style)
+Black text on white background
+Asymmetric layout - lines are deliberately off-center
+Maximum font size (like 80-120px)
+Clean, lots of white space
+
+Scroll Animation Behavior:
+
+Line 1 ("TRANSFORMING IDEAS") → slides RIGHT and fades out
+Line 2 ("INTO REALITY") → slides LEFT and fades out
+Line 3 ("THROUGH INNOVATIVE") → slides RIGHT and fades out
+Line 4 ("DESIGN & 3D PRINTING") → slides LEFT and fades out
+Alternating pattern based on index (even=right, odd=left)
+
+Small subtext beneath:
+
+"Scroll to explore" in small, light gray text
+Down arrow that animates
+
+
+TRANSITION MOMENT #1 (Color Inversion)
+As you scroll past hero section:
+
+Background fades from WHITE → ORANGE
+Text color fades from BLACK/DARK → WHITE
+Smooth transition over ~200px of scroll
+Everything inverts
+
+
+WORK SHOWCASE SECTION (Orange background, white text)
+Heading at top:
+ASK YOURSELF — WHAT IF YOU COULD:
+
+Large white typography
+Centered or left-aligned
+
+Interactive Carousel:
+
+Horizontal scrollable cards (or arrow navigation)
+Each card shows one benefit:
+
+"Prototype products in days, not months"
+"Reduce manufacturing costs by 40%"
+"Unlock limitless design possibilities"
+"Transform complex ideas into tangible objects"
+"Iterate designs without expensive tooling"
+
+
+Card Design:
+
+Large card (like 600px wide)
+White text on slightly darker orange background
+Minimal, clean design
+Number in corner (01, 02, 03...)
+Simple icon or small image if needed
+
+
+Navigation:
+
+Left/right arrows on sides
+Or drag to scroll horizontally
+Smooth transitions between cards
+Dots indicator showing which card you're on
+
+
+
+Featured Work Grid Below:
+
+3-4 project thumbnails in grid
+Each shows:
+
+Project image
+Category tag
+Brief title
+
+
+Hover effect: Image zooms slightly, orange overlay appears
+Click to view case study (later)
+
+
+SCROLL-TRIGGERED TEXT REVEAL (Still orange background)
+Large paragraph about ThinkCraft:
+At Think Craft Lab, we are fueled by a passion for innovation 
+and a commitment to excellence in 2D and 3D designing, design 
+consulting, and 3D printing. With a team of seasoned design 
+engineers having approximately eight years of expertise in 
+designing, six years in consulting, and three years specialization 
+in 3D printing, we bring a wealth of experience to every project. 
+We transform ideas into reality, ensuring innovation, precision, 
+and reliability in every creation we deliver.
+
+Large text (like 32-40px)
+White text initially at 50% opacity (gray-ish white)
+As you scroll through this section:
+
+Words/phrases highlight to 100% white progressively
+Maybe add subtle orange underline to highlighted text
+Creates reading rhythm as you scroll
+
+
+Each sentence or phrase highlights as it reaches center of viewport
+
+
+STAGGERED TEXT ANIMATION SECTION (Still orange)
+Scroll-driven parallax word animation:
+Words appear one at a time as you scroll, sliding in from alternating directions:
+
+"EXPECT" → slides in from LEFT to RIGHT
+"BRAVE" → slides in from RIGHT to LEFT (overlaps with EXPECT)
+"INNOVATIVE" → slides in from LEFT to RIGHT (EXPECT starts fading)
+"SOLUTIONS" → slides in from RIGHT to LEFT (BRAVE fading)
+"DESIGNED" → slides in from LEFT to RIGHT
+"FOR YOU" → slides in from RIGHT to LEFT
+
+Visual behavior:
+
+Large bold words (like 120px+)
+White text
+Semi-transparent as they move
+Creates dynamic, flowing effect
+Overlapping motion
+Scroll controls the timeline (not auto-play)
+Words fade out as new ones enter
+
+Technical approach:
+
+GSAP ScrollTrigger
+Staggered timeline animation
+Scrub linked to scroll position
+
+
+TRANSITION MOMENT #2 (Color Restoration)
+After the staggered text section:
+
+Background fades from ORANGE → WHITE
+Text fades from WHITE → BLACK/DARK
+Smooth transition back to original colors
+~200px scroll distance
+
+
+BRIEF COMPANY INFO (White background)
+Simple, clean section:
+
+"Why ThinkCraft" headline in black
+Three key points in a row:
+
+Icon + "8+ Years Design Experience"
+Icon + "6+ Years Consulting"
+Icon + "3+ Years 3D Printing"
+
+
+Orange accent icons
+Minimal design, lots of space
+Stats counter animation when scrolled into view
+
+
+FOOTER (White or light gray background)
+Minimalist footer design:
+Three columns:
+
+Column 1: Quick Links
+
+Home
+Shop
+Work
+About
+
+
+Column 2: Services
+
+3D Printing
+Design Consulting
+Prototyping
+Custom Solutions
+
+
+Column 3: Connect
+
+Email: connect@thinkcraftlab.com
+Phone: +91 9889804044
+Location: Bareilly, UP
+Social icons (LinkedIn, Instagram, Twitter)
+
+
+
+Bottom bar:
+
+Copyright text: "© 2025 ThinkCraft Lab. All rights reserved."
+Simple, clean typography
+Orange social icons with hover effects
+
+Back to Top button:
+
+Small circular button, bottom right
+Orange with white arrow icon
+Smooth scroll to top on click
+
+
+Overall Animation Philosophy:
+
+Smooth and purposeful - every animation serves the narrative
+Performance optimized - 60fps on all devices
+Scroll-driven storytelling - user controls the pace
+Color transitions create distinct sections
+Typography-focused - minimal imagery, maximum impact
+Professional yet bold - Swiss minimalism meets modern web
+
+Color Journey:
+
+White → Orange → White (creates visual chapters)
+Preloader is orange to white (warm welcome)
+Strategic inversions keep things dynamic
+
+This design is content-light, animation-heavy as requested, letting the interactions tell ThinkCraft's story.
