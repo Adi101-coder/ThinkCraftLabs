@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
+import { Link } from 'wouter';
 
 export default function Navigation() {
   const navRef = useRef<HTMLDivElement>(null);
@@ -46,52 +47,72 @@ export default function Navigation() {
               className="h-8 md:h-10 w-auto"
             />
           </div>
-          <div className="flex space-x-8">
-            <button
-              onClick={() => scrollToSection('hero')}
-              className="nav-link text-foreground hover:text-primary transition-all duration-300 relative group px-3 py-2 rounded-lg overflow-hidden"
-              data-testid="nav-home"
-            >
-              <span className="relative z-10">Home</span>
-              <span className="absolute inset-0 bg-primary/10 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
-            </button>
-            <button
-              onClick={() => scrollToSection('work-showcase')}
-              className="nav-link text-foreground hover:text-primary transition-all duration-300 relative group px-3 py-2 rounded-lg overflow-hidden"
-              data-testid="nav-shop"
-            >
-              <span className="relative z-10">Shop</span>
-              <span className="absolute inset-0 bg-primary/10 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
-            </button>
-            <button
-              onClick={() => scrollToSection('work-showcase')}
-              className="nav-link text-foreground hover:text-primary transition-all duration-300 relative group px-3 py-2 rounded-lg overflow-hidden"
-              data-testid="nav-work"
-            >
-              <span className="relative z-10">Work</span>
-              <span className="absolute inset-0 bg-primary/10 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
-            </button>
-            <button
-              onClick={() => scrollToSection('company-info')}
-              className="nav-link text-foreground hover:text-primary transition-all duration-300 relative group px-3 py-2 rounded-lg overflow-hidden"
-              data-testid="nav-about"
-            >
-              <span className="relative z-10">About Us</span>
-              <span className="absolute inset-0 bg-primary/10 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
-            </button>
-            <button
-              onClick={() => scrollToSection('footer')}
-              className="nav-link text-foreground hover:text-primary transition-all duration-300 relative group px-3 py-2 rounded-lg overflow-hidden"
-              data-testid="nav-contact"
-            >
-              <span className="relative z-10">Contact</span>
-              <span className="absolute inset-0 bg-primary/10 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
-            </button>
+          <div className="flex items-center space-x-4">
+            <div className="flex space-x-8">
+              <button
+                onClick={() => scrollToSection('hero')}
+                className="nav-link text-foreground hover:text-primary transition-all duration-300 relative group px-3 py-2 rounded-lg overflow-hidden"
+                data-testid="nav-home"
+              >
+                <span className="relative z-10">Home</span>
+                <span className="absolute inset-0 bg-primary/10 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
+              </button>
+              <Link href="/shop">
+                <span className="nav-link text-foreground hover:text-primary transition-all duration-300 relative group px-3 py-2 rounded-lg overflow-hidden cursor-pointer inline-block"
+                  data-testid="nav-shop"
+                >
+                  <span className="relative z-10">Shop</span>
+                  <span className="absolute inset-0 bg-primary/10 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
+                </span>
+              </Link>
+              <button
+                onClick={() => scrollToSection('work-showcase')}
+                className="nav-link text-foreground hover:text-primary transition-all duration-300 relative group px-3 py-2 rounded-lg overflow-hidden"
+                data-testid="nav-work"
+              >
+                <span className="relative z-10">Work</span>
+                <span className="absolute inset-0 bg-primary/10 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
+              </button>
+              <Link href="/about">
+                <span className="nav-link text-foreground hover:text-primary transition-all duration-300 relative group px-3 py-2 rounded-lg overflow-hidden cursor-pointer inline-block"
+                  data-testid="nav-about"
+                >
+                  <span className="relative z-10">About Us</span>
+                  <span className="absolute inset-0 bg-primary/10 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
+                </span>
+              </Link>
+              <button
+                onClick={() => scrollToSection('footer')}
+                className="nav-link text-foreground hover:text-primary transition-all duration-300 relative group px-3 py-2 rounded-lg overflow-hidden"
+                data-testid="nav-contact"
+              >
+                <span className="relative z-10">Contact</span>
+                <span className="absolute inset-0 bg-primary/10 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
+              </button>
+            </div>
+            
+            {/* Wishlist and Cart Icons */}
+            <div className="flex items-center space-x-2 ml-4 pl-4 border-l border-gray-200">
+              <Link href="/wishlist">
+                <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors relative group">
+                  <svg className="w-6 h-6 text-gray-700 group-hover:text-[#ff6a00] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                  </svg>
+                </button>
+              </Link>
+              <Link href="/cart">
+                <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors relative group">
+                  <svg className="w-6 h-6 text-gray-700 group-hover:text-[#ff6a00] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                </button>
+              </Link>
+            </div>
           </div>
         </div>
       </nav>
@@ -108,33 +129,51 @@ export default function Navigation() {
             />
           </div>
 
-          {/* Hamburger Button */}
-          <button
-            onClick={toggleMobileMenu}
-            className="relative w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#ff6a00] focus:ring-opacity-50"
-            aria-label="Toggle navigation menu"
-          >
-            <div className="w-6 h-6 flex flex-col justify-center items-center">
-              <span
-                className={`block w-5 h-0.5 bg-gray-700 transition-all duration-300 ease-out ${isMobileMenuOpen
+          <div className="flex items-center space-x-2">
+            {/* Wishlist and Cart Icons for Mobile */}
+            <Link href="/wishlist">
+              <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+              </button>
+            </Link>
+            <Link href="/cart">
+              <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+              </button>
+            </Link>
+            
+            {/* Hamburger Button */}
+            <button
+              onClick={toggleMobileMenu}
+              className="relative w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#ff6a00] focus:ring-opacity-50"
+              aria-label="Toggle navigation menu"
+            >
+              <div className="w-6 h-6 flex flex-col justify-center items-center">
+                <span
+                  className={`block w-5 h-0.5 bg-gray-700 transition-all duration-300 ease-out ${isMobileMenuOpen
                   ? 'rotate-45 translate-y-1.5 bg-[#ff6a00]'
                   : 'rotate-0 translate-y-0'
                   }`}
-              />
-              <span
-                className={`block w-5 h-0.5 bg-gray-700 transition-all duration-300 ease-out mt-1 ${isMobileMenuOpen
+                />
+                <span
+                  className={`block w-5 h-0.5 bg-gray-700 transition-all duration-300 ease-out mt-1 ${isMobileMenuOpen
                   ? 'opacity-0 scale-0'
                   : 'opacity-100 scale-100'
                   }`}
-              />
-              <span
-                className={`block w-5 h-0.5 bg-gray-700 transition-all duration-300 ease-out mt-1 ${isMobileMenuOpen
+                />
+                <span
+                  className={`block w-5 h-0.5 bg-gray-700 transition-all duration-300 ease-out mt-1 ${isMobileMenuOpen
                   ? '-rotate-45 -translate-y-1.5 bg-[#ff6a00]'
                   : 'rotate-0 translate-y-0'
                   }`}
-              />
-            </div>
-          </button>
+                />
+              </div>
+            </button>
+          </div>
         </div>
       </nav>
 
@@ -174,27 +213,74 @@ export default function Navigation() {
           {/* Menu Items */}
           <div className="flex-1 px-6 py-8">
             <nav className="space-y-2">
-              {[
-                { label: 'Home', id: 'hero', delay: '0ms' },
-                { label: 'Shop', id: 'work-showcase', delay: '50ms' },
-                { label: 'Work', id: 'work-showcase', delay: '100ms' },
-                { label: 'About Us', id: 'company-info', delay: '150ms' },
-                { label: 'Contact', id: 'footer', delay: '200ms' }
-              ].map((item, index) => (
-                <button
-                  key={item.id}
-                  onClick={() => scrollToSection(item.id)}
-                  className={`w-full text-left px-4 py-4 text-lg font-medium text-gray-900 hover:text-[#ff6a00] hover:bg-orange-50 rounded-xl transition-all duration-200 transform ${isMobileMenuOpen
+              <button
+                onClick={() => scrollToSection('hero')}
+                className={`w-full text-left px-4 py-4 text-lg font-medium text-gray-900 hover:text-[#ff6a00] hover:bg-orange-50 rounded-xl transition-all duration-200 transform ${isMobileMenuOpen
+                  ? 'translate-x-0 opacity-100'
+                  : 'translate-x-8 opacity-0'
+                  }`}
+                style={{
+                  transitionDelay: isMobileMenuOpen ? '0ms' : '0ms'
+                }}
+              >
+                Home
+              </button>
+              
+              <Link href="/shop">
+                <span
+                  className={`w-full text-left px-4 py-4 text-lg font-medium text-gray-900 hover:text-[#ff6a00] hover:bg-orange-50 rounded-xl transition-all duration-200 transform block cursor-pointer ${isMobileMenuOpen
                     ? 'translate-x-0 opacity-100'
                     : 'translate-x-8 opacity-0'
                     }`}
                   style={{
-                    transitionDelay: isMobileMenuOpen ? item.delay : '0ms'
+                    transitionDelay: isMobileMenuOpen ? '50ms' : '0ms'
                   }}
+                  onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  {item.label}
-                </button>
-              ))}
+                  Shop
+                </span>
+              </Link>
+
+              <button
+                onClick={() => scrollToSection('work-showcase')}
+                className={`w-full text-left px-4 py-4 text-lg font-medium text-gray-900 hover:text-[#ff6a00] hover:bg-orange-50 rounded-xl transition-all duration-200 transform ${isMobileMenuOpen
+                  ? 'translate-x-0 opacity-100'
+                  : 'translate-x-8 opacity-0'
+                  }`}
+                style={{
+                  transitionDelay: isMobileMenuOpen ? '100ms' : '0ms'
+                }}
+              >
+                Work
+              </button>
+
+              <Link href="/about">
+                <span
+                  className={`w-full text-left px-4 py-4 text-lg font-medium text-gray-900 hover:text-[#ff6a00] hover:bg-orange-50 rounded-xl transition-all duration-200 transform block cursor-pointer ${isMobileMenuOpen
+                    ? 'translate-x-0 opacity-100'
+                    : 'translate-x-8 opacity-0'
+                    }`}
+                  style={{
+                    transitionDelay: isMobileMenuOpen ? '150ms' : '0ms'
+                  }}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  About Us
+                </span>
+              </Link>
+
+              <button
+                onClick={() => scrollToSection('footer')}
+                className={`w-full text-left px-4 py-4 text-lg font-medium text-gray-900 hover:text-[#ff6a00] hover:bg-orange-50 rounded-xl transition-all duration-200 transform ${isMobileMenuOpen
+                  ? 'translate-x-0 opacity-100'
+                  : 'translate-x-8 opacity-0'
+                  }`}
+                style={{
+                  transitionDelay: isMobileMenuOpen ? '200ms' : '0ms'
+                }}
+              >
+                Contact
+              </button>
             </nav>
           </div>
 

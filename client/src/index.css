@@ -965,3 +965,15 @@ button[data-testid="mobile-menu"] span {
   border-left: 1px solid var(--mobile-nav-border);
   box-shadow: -10px 0 25px -5px rgba(0, 0, 0, 0.1);
 }
+/* Hide sc
+rollbar utility class */
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
