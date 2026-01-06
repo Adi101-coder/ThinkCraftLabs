@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
-import { Link } from 'wouter';
+import { Link, useLocation } from 'wouter';
 import { useShop } from '@/contexts/ShopContext';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -8,6 +8,17 @@ export default function Navigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { cart, wishlist } = useShop();
   const { user, isAuthenticated } = useAuth();
+  const [location, setLocation] = useLocation();
+
+  const handleHomeClick = () => {
+    if (location === '/') {
+      // If already on home page, scroll to hero
+      scrollToSection('hero');
+    } else {
+      // Navigate to home page
+      setLocation('/');
+    }
+  };
 
   const scrollToSection = (sectionId: string) => {
     const section = document.getElementById(sectionId);
@@ -52,9 +63,9 @@ export default function Navigation() {
             />
           </div>
           <div className="flex items-center space-x-4">
-            <div className="flex space-x-8">
+            <div className="flex items-center space-x-8">
               <button
-                onClick={() => scrollToSection('hero')}
+                onClick={handleHomeClick}
                 className="nav-link text-foreground hover:text-primary transition-all duration-300 relative group px-3 py-2 rounded-lg overflow-hidden"
                 data-testid="nav-home"
               >
@@ -63,31 +74,31 @@ export default function Navigation() {
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
               </button>
               <Link href="/shop">
-                <span className="nav-link text-foreground hover:text-primary transition-all duration-300 relative group px-3 py-2 rounded-lg overflow-hidden cursor-pointer inline-block"
+                <button className="nav-link text-foreground hover:text-primary transition-all duration-300 relative group px-3 py-2 rounded-lg overflow-hidden cursor-pointer"
                   data-testid="nav-shop"
                 >
                   <span className="relative z-10">Shop</span>
                   <span className="absolute inset-0 bg-primary/10 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
                   <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
-                </span>
+                </button>
               </Link>
-              <button
-                onClick={() => scrollToSection('work-showcase')}
-                className="nav-link text-foreground hover:text-primary transition-all duration-300 relative group px-3 py-2 rounded-lg overflow-hidden"
-                data-testid="nav-work"
-              >
-                <span className="relative z-10">Work</span>
-                <span className="absolute inset-0 bg-primary/10 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
-              </button>
+              <Link href="/work">
+                <button className="nav-link text-foreground hover:text-primary transition-all duration-300 relative group px-3 py-2 rounded-lg overflow-hidden cursor-pointer"
+                  data-testid="nav-work"
+                >
+                  <span className="relative z-10">Work</span>
+                  <span className="absolute inset-0 bg-primary/10 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
+                </button>
+              </Link>
               <Link href="/about">
-                <span className="nav-link text-foreground hover:text-primary transition-all duration-300 relative group px-3 py-2 rounded-lg overflow-hidden cursor-pointer inline-block"
+                <button className="nav-link text-foreground hover:text-primary transition-all duration-300 relative group px-3 py-2 rounded-lg overflow-hidden cursor-pointer"
                   data-testid="nav-about"
                 >
                   <span className="relative z-10">About Us</span>
                   <span className="absolute inset-0 bg-primary/10 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
                   <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
-                </span>
+                </button>
               </Link>
               <button
                 onClick={() => scrollToSection('footer')}
@@ -99,7 +110,7 @@ export default function Navigation() {
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
               </button>
             </div>
-            
+
             {/* Wishlist, Cart, and Profile Icons */}
             <div className="flex items-center space-x-2 ml-4 pl-4 border-l border-gray-200">
               <Link href="/wishlist">
@@ -186,7 +197,7 @@ export default function Navigation() {
                 </svg>
               </button>
             </Link>
-            
+
             {/* Hamburger Button */}
             <button
               onClick={toggleMobileMenu}
@@ -196,21 +207,21 @@ export default function Navigation() {
               <div className="w-6 h-6 flex flex-col justify-center items-center">
                 <span
                   className={`block w-5 h-0.5 bg-gray-700 transition-all duration-300 ease-out ${isMobileMenuOpen
-                  ? 'rotate-45 translate-y-1.5 bg-[#ff6a00]'
-                  : 'rotate-0 translate-y-0'
-                  }`}
+                    ? 'rotate-45 translate-y-1.5 bg-[#ff6a00]'
+                    : 'rotate-0 translate-y-0'
+                    }`}
                 />
                 <span
                   className={`block w-5 h-0.5 bg-gray-700 transition-all duration-300 ease-out mt-1 ${isMobileMenuOpen
-                  ? 'opacity-0 scale-0'
-                  : 'opacity-100 scale-100'
-                  }`}
+                    ? 'opacity-0 scale-0'
+                    : 'opacity-100 scale-100'
+                    }`}
                 />
                 <span
                   className={`block w-5 h-0.5 bg-gray-700 transition-all duration-300 ease-out mt-1 ${isMobileMenuOpen
-                  ? '-rotate-45 -translate-y-1.5 bg-[#ff6a00]'
-                  : 'rotate-0 translate-y-0'
-                  }`}
+                    ? '-rotate-45 -translate-y-1.5 bg-[#ff6a00]'
+                    : 'rotate-0 translate-y-0'
+                    }`}
                 />
               </div>
             </button>
@@ -255,7 +266,7 @@ export default function Navigation() {
           <div className="flex-1 px-6 py-8">
             <nav className="space-y-2">
               <button
-                onClick={() => scrollToSection('hero')}
+                onClick={handleHomeClick}
                 className={`w-full text-left px-4 py-4 text-lg font-medium text-gray-900 hover:text-[#ff6a00] hover:bg-orange-50 rounded-xl transition-all duration-200 transform ${isMobileMenuOpen
                   ? 'translate-x-0 opacity-100'
                   : 'translate-x-8 opacity-0'
@@ -266,7 +277,7 @@ export default function Navigation() {
               >
                 Home
               </button>
-              
+
               <Link href="/shop">
                 <span
                   className={`w-full text-left px-4 py-4 text-lg font-medium text-gray-900 hover:text-[#ff6a00] hover:bg-orange-50 rounded-xl transition-all duration-200 transform block cursor-pointer ${isMobileMenuOpen
@@ -282,18 +293,20 @@ export default function Navigation() {
                 </span>
               </Link>
 
-              <button
-                onClick={() => scrollToSection('work-showcase')}
-                className={`w-full text-left px-4 py-4 text-lg font-medium text-gray-900 hover:text-[#ff6a00] hover:bg-orange-50 rounded-xl transition-all duration-200 transform ${isMobileMenuOpen
-                  ? 'translate-x-0 opacity-100'
-                  : 'translate-x-8 opacity-0'
-                  }`}
-                style={{
-                  transitionDelay: isMobileMenuOpen ? '100ms' : '0ms'
-                }}
-              >
-                Work
-              </button>
+              <Link href="/work">
+                <span
+                  className={`w-full text-left px-4 py-4 text-lg font-medium text-gray-900 hover:text-[#ff6a00] hover:bg-orange-50 rounded-xl transition-all duration-200 transform block cursor-pointer ${isMobileMenuOpen
+                    ? 'translate-x-0 opacity-100'
+                    : 'translate-x-8 opacity-0'
+                    }`}
+                  style={{
+                    transitionDelay: isMobileMenuOpen ? '100ms' : '0ms'
+                  }}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Work
+                </span>
+              </Link>
 
               <Link href="/about">
                 <span

@@ -8,6 +8,7 @@ import { ShopProvider } from "@/contexts/ShopContext";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Home from "@/pages/home";
 import Shop from "@/pages/shop";
+import Work from "@/pages/work";
 import About from "@/pages/about";
 import Wishlist from "@/pages/wishlist";
 import Cart from "@/pages/cart";
@@ -21,6 +22,7 @@ function Router() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/shop" component={Shop} />
+      <Route path="/work" component={Work} />
       <Route path="/about" component={About} />
       <Route path="/wishlist" component={Wishlist} />
       <Route path="/cart" component={Cart} />
