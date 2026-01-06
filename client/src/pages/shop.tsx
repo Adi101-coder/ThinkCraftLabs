@@ -2,6 +2,7 @@ import Navigation from "@/components/navigation";
 import Footer from "@/components/footer";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useShop } from "@/contexts/ShopContext";
 
 interface Product {
     id: number;
@@ -15,6 +16,32 @@ export default function Shop() {
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
     const [selectedSize, setSelectedSize] = useState<string>("Medium");
     const [modalPosition, setModalPosition] = useState({ top: 0 });
+    const [notification, setNotification] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+    const { addToCart, addToWishlist, isInWishlist } = useShop();
+
+    const showNotification = (message: string, type: 'success' | 'error' = 'success') => {
+        setNotification({ message, type });
+        setTimeout(() => setNotification(null), 3000);
+    };
+
+    const handleAddToCart = () => {
+        if (selectedProduct) {
+            addToCart(selectedProduct, selectedSize);
+            setSelectedProduct(null);
+            showNotification(`${selectedProduct.name} added to cart!`);
+        }
+    };
+
+    const handleAddToWishlist = () => {
+        if (selectedProduct) {
+            if (isInWishlist(selectedProduct.id)) {
+                showNotification('Already in wishlist', 'error');
+            } else {
+                addToWishlist(selectedProduct);
+                showNotification(`${selectedProduct.name} added to wishlist!`);
+            }
+        }
+    };
 
     // Prevent body scroll when modal is open
     useEffect(() => {
@@ -114,6 +141,35 @@ export default function Shop() {
     return (
         <div className="min-h-screen bg-white">
             <Navigation />
+
+            {/* Notification Toast */}
+            <AnimatePresence>
+                {notification && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -50 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -50 }}
+                        className={`fixed top-24 right-4 z-[100] px-6 py-4 rounded-lg shadow-lg ${
+                            notification.type === 'success' 
+                                ? 'bg-green-500 text-white' 
+                                : 'bg-red-500 text-white'
+                        }`}
+                    >
+                        <div className="flex items-center gap-3">
+                            {notification.type === 'success' ? (
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                </svg>
+                            ) : (
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            )}
+                            <span className="font-medium">{notification.message}</span>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             {/* Main Shopping Content */}
             <main className="pt-32 pb-16 px-4 sm:px-6 lg:px-8">
@@ -289,11 +345,20 @@ export default function Shop() {
 
                                                 {/* Action Buttons */}
                                                 <div className="flex gap-3 mb-6">
-                                                    <button className="flex-1 px-6 py-3 bg-[#ff6a00] text-white rounded-lg font-semibold hover:bg-[#ff7f33] transition-colors">
+                                                    <button
+                                                        onClick={handleAddToCart}
+                                                        className="flex-1 px-6 py-3 bg-[#ff6a00] text-white rounded-lg font-semibold hover:bg-[#ff7f33] transition-colors"
+                                                    >
                                                         Add to Cart
                                                     </button>
-                                                    <button className="px-6 py-3 border-2 border-gray-200 rounded-lg hover:border-[#ff6a00] hover:text-[#ff6a00] transition-colors">
-                                                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <button
+                                                        onClick={handleAddToWishlist}
+                                                        className={`px-6 py-3 border-2 rounded-lg transition-colors ${isInWishlist(selectedProduct.id)
+                                                            ? "border-[#ff6a00] bg-[#ff6a00] text-white"
+                                                            : "border-gray-200 hover:border-[#ff6a00] hover:text-[#ff6a00]"
+                                                            }`}
+                                                    >
+                                                        <svg className="w-6 h-6" fill={isInWishlist(selectedProduct.id) ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24">
                                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                                                         </svg>
                                                     </button>
