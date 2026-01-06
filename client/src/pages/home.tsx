@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Preloader from '@/components/preloader';
 import Navigation from '@/components/navigation';
 import HeroSection from '@/components/hero-section';
@@ -18,10 +18,15 @@ import ScrollIndicator from '@/components/scroll-indicator';
 
 
 export default function Home() {
-  const [preloaderComplete, setPreloaderComplete] = useState(false);
+  const [preloaderComplete, setPreloaderComplete] = useState(() => {
+    // Check if preloader has already been shown in this session
+    return sessionStorage.getItem('preloaderShown') === 'true';
+  });
 
   const handlePreloaderComplete = () => {
     setPreloaderComplete(true);
+    // Mark preloader as shown for this session
+    sessionStorage.setItem('preloaderShown', 'true');
   };
 
 
