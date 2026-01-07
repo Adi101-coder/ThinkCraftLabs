@@ -73,7 +73,6 @@ export default function Shop() {
         setSelectedProduct(product);
         // Calculate position to show modal in current viewport
         const scrollY = window.scrollY;
-        const viewportHeight = window.innerHeight;
         const clickY = event.clientY;
 
         // Position modal to be visible in current viewport
@@ -157,49 +156,49 @@ export default function Shop() {
                         initial={{ opacity: 0, y: -50 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -50 }}
-                        className={`fixed top-24 right-4 z-[100] px-6 py-4 rounded-lg shadow-lg ${
+                        className={`fixed top-20 sm:top-24 right-2 sm:right-4 left-2 sm:left-auto z-[100] px-4 sm:px-6 py-3 sm:py-4 rounded-lg shadow-lg ${
                             notification.type === 'success' 
                                 ? 'bg-green-500 text-white' 
                                 : 'bg-red-500 text-white'
                         }`}
                     >
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2 sm:gap-3">
                             {notification.type === 'success' ? (
-                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg className="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                 </svg>
                             ) : (
-                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg className="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                                 </svg>
                             )}
-                            <span className="font-medium">{notification.message}</span>
+                            <span className="font-medium text-sm sm:text-base">{notification.message}</span>
                         </div>
                     </motion.div>
                 )}
             </AnimatePresence>
 
             {/* Main Shopping Content */}
-            <main className="pt-32 pb-16 px-4 sm:px-6 lg:px-8">
+            <main className="pt-24 sm:pt-28 md:pt-32 pb-12 sm:pb-16 px-3 sm:px-4 md:px-6 lg:px-8">
                 <div className="max-w-7xl mx-auto">
                     {/* Page Header */}
                     <motion.div
-                        className="mb-12"
+                        className="mb-8 sm:mb-10 md:mb-12"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 }}
                     >
-                        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-4">
+                        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-3 sm:mb-4">
                             Shop
                         </h1>
-                        <p className="text-lg text-gray-600 max-w-2xl">
+                        <p className="text-base sm:text-lg text-gray-600 max-w-2xl">
                             Discover our curated collection of innovative products and services
                         </p>
                     </motion.div>
 
                     {/* Filters Section */}
                     <motion.div
-                        className="mb-8 flex flex-wrap gap-4"
+                        className="mb-6 sm:mb-8 flex flex-wrap gap-2 sm:gap-3 md:gap-4"
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.1 }}
@@ -208,7 +207,7 @@ export default function Shop() {
                             <button
                                 key={category}
                                 onClick={() => setSelectedCategory(category)}
-                                className={`px-6 py-2 rounded-full font-medium transition-colors ${
+                                className={`px-4 sm:px-5 md:px-6 py-2 text-sm sm:text-base rounded-full font-medium transition-colors ${
                                     selectedCategory === category
                                         ? 'bg-[#ff6a00] text-white'
                                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -222,7 +221,7 @@ export default function Shop() {
                     {/* Products Grid */}
                     <motion.div
                         key={selectedCategory}
-                        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+                        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 md:gap-8"
                         initial="hidden"
                         animate="visible"
                         variants={{
@@ -246,7 +245,7 @@ export default function Shop() {
                                 whileHover={{ y: -5 }}
                                 transition={{ duration: 0.3 }}
                                 onClick={(e) => handleProductClick(product, e)}
-                                className="group bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer"
+                                className="group bg-white border border-gray-200 rounded-xl sm:rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer"
                             >
                                 {/* Product Image */}
                                 <div className="aspect-square bg-gray-100 relative overflow-hidden">
@@ -259,15 +258,15 @@ export default function Shop() {
                                 </div>
 
                                 {/* Product Info */}
-                                <div className="p-6">
-                                    <h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-[#ff6a00] transition-colors">
+                                <div className="p-4 sm:p-5 md:p-6">
+                                    <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2 group-hover:text-[#ff6a00] transition-colors line-clamp-1">
                                         {product.name}
                                     </h3>
-                                    <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                                    <p className="text-gray-600 text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2">
                                         {product.desc}
                                     </p>
                                     <div className="flex items-center justify-between">
-                                        <span className="text-2xl font-bold text-gray-900">
+                                        <span className="text-xl sm:text-2xl font-bold text-gray-900">
                                             ${product.price}
                                         </span>
                                     </div>
@@ -298,17 +297,27 @@ export default function Shop() {
                             exit={{ opacity: 0, scale: 0.9 }}
                             transition={{ type: "spring", duration: 0.4, bounce: 0.3 }}
                             style={{ top: `${modalPosition.top}px` }}
-                            className="fixed left-0 right-0 z-[60] px-4 mx-auto w-full max-w-5xl"
+                            className="fixed left-0 right-0 z-[60] px-2 sm:px-4 mx-auto w-full max-w-5xl"
                             onClick={(e) => e.stopPropagation()}
                         >
-                            <div className="bg-white rounded-2xl shadow-2xl w-full max-h-[85vh] overflow-hidden flex flex-col mx-auto">
+                            <div className="bg-white rounded-xl sm:rounded-2xl shadow-2xl w-full max-h-[90vh] sm:max-h-[85vh] overflow-hidden flex flex-col mx-auto">
+                                {/* Close Button */}
+                                <button
+                                    onClick={() => setSelectedProduct(null)}
+                                    className="absolute top-3 right-3 sm:top-4 sm:right-4 z-10 w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-gray-100 transition-colors"
+                                >
+                                    <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+
                                 {/* Scrollable Content */}
                                 <div className="overflow-y-auto flex-1 scrollbar-hide">
-                                    <div className="p-6 md:p-8">
+                                    <div className="p-4 sm:p-6 md:p-8">
                                         {/* Product Details Section */}
-                                        <div className="grid md:grid-cols-2 gap-8 mb-8">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-6 sm:mb-8">
                                             {/* Product Image */}
-                                            <div className="rounded-xl overflow-hidden bg-gray-100">
+                                            <div className="rounded-lg sm:rounded-xl overflow-hidden bg-gray-100">
                                                 <img
                                                     src={selectedProduct.image}
                                                     alt={selectedProduct.name}
@@ -318,31 +327,31 @@ export default function Shop() {
 
                                             {/* Product Info */}
                                             <div className="flex flex-col">
-                                                <h2 className="text-3xl font-bold text-gray-900 mb-2">
+                                                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
                                                     {selectedProduct.name}
                                                 </h2>
-                                                <p className="text-gray-600 mb-6">
+                                                <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">
                                                     {selectedProduct.desc}
                                                 </p>
 
                                                 {/* Price */}
-                                                <div className="mb-6">
-                                                    <span className="text-4xl font-bold text-gray-900">
+                                                <div className="mb-4 sm:mb-6">
+                                                    <span className="text-3xl sm:text-4xl font-bold text-gray-900">
                                                         ${selectedProduct.price}
                                                     </span>
                                                 </div>
 
                                                 {/* Size Selection */}
-                                                <div className="mb-6">
-                                                    <h3 className="text-sm font-semibold text-gray-900 mb-3">
+                                                <div className="mb-4 sm:mb-6">
+                                                    <h3 className="text-xs sm:text-sm font-semibold text-gray-900 mb-2 sm:mb-3">
                                                         Select Size
                                                     </h3>
-                                                    <div className="flex gap-2">
+                                                    <div className="flex flex-wrap gap-2">
                                                         {sizes.map((size) => (
                                                             <button
                                                                 key={size}
                                                                 onClick={() => setSelectedSize(size)}
-                                                                className={`px-4 py-2 rounded-lg border-2 transition-all ${selectedSize === size
+                                                                className={`px-3 sm:px-4 py-2 text-sm sm:text-base rounded-lg border-2 transition-all ${selectedSize === size
                                                                     ? "border-[#ff6a00] bg-[#ff6a00] text-white"
                                                                     : "border-gray-200 hover:border-gray-300"
                                                                     }`}
@@ -354,32 +363,32 @@ export default function Shop() {
                                                 </div>
 
                                                 {/* Action Buttons */}
-                                                <div className="flex gap-3 mb-6">
+                                                <div className="flex flex-col sm:flex-row gap-3 mb-4 sm:mb-6">
                                                     <button
                                                         onClick={handleAddToCart}
-                                                        className="flex-1 px-6 py-3 bg-[#ff6a00] text-white rounded-lg font-semibold hover:bg-[#ff7f33] transition-colors"
+                                                        className="flex-1 px-4 sm:px-6 py-3 text-sm sm:text-base bg-[#ff6a00] text-white rounded-lg font-semibold hover:bg-[#ff7f33] transition-colors"
                                                     >
                                                         Add to Cart
                                                     </button>
                                                     <button
                                                         onClick={handleAddToWishlist}
-                                                        className={`px-6 py-3 border-2 rounded-lg transition-colors ${isInWishlist(selectedProduct.id)
+                                                        className={`px-4 sm:px-6 py-3 border-2 rounded-lg transition-colors ${isInWishlist(selectedProduct.id)
                                                             ? "border-[#ff6a00] bg-[#ff6a00] text-white"
                                                             : "border-gray-200 hover:border-[#ff6a00] hover:text-[#ff6a00]"
                                                             }`}
                                                     >
-                                                        <svg className="w-6 h-6" fill={isInWishlist(selectedProduct.id) ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24">
+                                                        <svg className="w-5 h-5 sm:w-6 sm:h-6 mx-auto" fill={isInWishlist(selectedProduct.id) ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24">
                                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                                                         </svg>
                                                     </button>
                                                 </div>
 
                                                 {/* Product Details */}
-                                                <div className="border-t border-gray-200 pt-6">
-                                                    <h3 className="text-sm font-semibold text-gray-900 mb-3">
+                                                <div className="border-t border-gray-200 pt-4 sm:pt-6">
+                                                    <h3 className="text-xs sm:text-sm font-semibold text-gray-900 mb-2 sm:mb-3">
                                                         Product Details
                                                     </h3>
-                                                    <ul className="space-y-2 text-sm text-gray-600">
+                                                    <ul className="space-y-2 text-xs sm:text-sm text-gray-600">
                                                         <li className="flex items-start">
                                                             <span className="text-[#ff6a00] mr-2">•</span>
                                                             <span>High-quality 3D printing technology</span>
@@ -402,11 +411,11 @@ export default function Shop() {
                                         </div>
 
                                         {/* Suggested Products */}
-                                        <div className="border-t border-gray-200 pt-8">
-                                            <h3 className="text-2xl font-bold text-gray-900 mb-6">
+                                        <div className="border-t border-gray-200 pt-6 sm:pt-8">
+                                            <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">
                                                 You May Also Like
                                             </h3>
-                                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
                                                 {getSuggestedProducts(selectedProduct.id).map((product) => (
                                                     <div
                                                         key={product.id}
@@ -414,7 +423,7 @@ export default function Shop() {
                                                             setSelectedProduct(product);
                                                             setSelectedSize("Medium");
                                                         }}
-                                                        className="group bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer"
+                                                        className="group bg-white border border-gray-200 rounded-lg sm:rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer"
                                                     >
                                                         <div className="aspect-square bg-gray-100 relative overflow-hidden">
                                                             <img
@@ -423,11 +432,11 @@ export default function Shop() {
                                                                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                                             />
                                                         </div>
-                                                        <div className="p-4">
-                                                            <h4 className="font-semibold text-gray-900 mb-1 group-hover:text-[#ff6a00] transition-colors">
+                                                        <div className="p-3 sm:p-4">
+                                                            <h4 className="text-sm sm:text-base font-semibold text-gray-900 mb-1 group-hover:text-[#ff6a00] transition-colors line-clamp-1">
                                                                 {product.name}
                                                             </h4>
-                                                            <p className="text-lg font-bold text-gray-900">
+                                                            <p className="text-base sm:text-lg font-bold text-gray-900">
                                                                 ${product.price}
                                                             </p>
                                                         </div>
