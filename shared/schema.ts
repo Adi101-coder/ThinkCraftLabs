@@ -1,46 +1,45 @@
-import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, integer, timestamp, decimal } from "drizzle-orm/pg-core";
+import { sqliteTable, text, integer, real } from "drizzle-orm/sqlite-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
-export const users = pgTable("users", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+export const users = sqliteTable("users", {
+  id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
   username: text("username").notNull().unique(),
   password: text("password").notNull(),
   email: text("email").notNull().unique(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
+  createdAt: integer("created_at", { mode: 'timestamp' }).$defaultFn(() => new Date()).notNull(),
 });
 
-export const products = pgTable("products", {
+export const products = sqliteTable("products", {
   id: integer("id").primaryKey(),
   name: text("name").notNull(),
-  price: decimal("price", { precision: 10, scale: 2 }).notNull(),
+  price: real("price").notNull(),
   image: text("image").notNull(),
   description: text("description").notNull(),
 });
 
-export const cart = pgTable("cart", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+export const cart = sqliteTable("cart", {
+  id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
   productId: integer("product_id").notNull(),
   productName: text("product_name").notNull(),
-  productPrice: decimal("product_price", { precision: 10, scale: 2 }).notNull(),
+  productPrice: real("product_price").notNull(),
   productImage: text("product_image").notNull(),
   productDescription: text("product_description").notNull(),
   size: text("size").notNull().default("Medium"),
   quantity: integer("quantity").notNull().default(1),
-  addedAt: timestamp("added_at").defaultNow().notNull(),
+  addedAt: integer("added_at", { mode: 'timestamp' }).$defaultFn(() => new Date()).notNull(),
 });
 
-export const wishlist = pgTable("wishlist", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+export const wishlist = sqliteTable("wishlist", {
+  id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
   productId: integer("product_id").notNull(),
   productName: text("product_name").notNull(),
-  productPrice: decimal("product_price", { precision: 10, scale: 2 }).notNull(),
+  productPrice: real("product_price").notNull(),
   productImage: text("product_image").notNull(),
   productDescription: text("product_description").notNull(),
-  addedAt: timestamp("added_at").defaultNow().notNull(),
+  addedAt: integer("added_at", { mode: 'timestamp' }).$defaultFn(() => new Date()).notNull(),
 });
 
 export const insertUserSchema = createInsertSchema(users).pick({
