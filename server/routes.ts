@@ -104,6 +104,126 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json({ user: userWithoutPassword });
   });
 
+  // Order routes
+  app.post('/api/orders', async (req, res) => {
+    try {
+      if (!req.session.userId) {
+        return res.status(401).json({ message: 'Not authenticated' });
+      }
+
+      const { shippingAddress, shippingCity, shippingState, shippingZip, shippingCountry, paymentMethod, couponCode, cartItems } = req.body;
+
+      if (!cartItems || cartItems.length === 0) {
+        return res.status(400).json({ message: 'Cart is empty' });
+      }
+
+      // Map frontend cart items to backend format
+      const mappedCartItems = cartItems.map((item: any) => ({
+        productId: item.id,
+        productName: item.name,
+        productPrice: parseFloat(item.price),
+        productImage: item.image,
+        productDescription: item.desc || '',
+        size: item.size,
+        quantity: item.quantity,
+      }));
+
+      const order = await storage.createOrder(
+        req.session.userId,
+        { shippingAddress, shippingCity, shippingState, shippingZip, shippingCountry, paymentMethod, couponCode },
+        mappedCartItems
+      );
+
+      res.json({ order });
+    } catch (error: any) {
+      res.status(400).json({ message: error.message || 'Order creation failed' });
+    }
+  });
+
+  app.get('/api/orders', async (req, res) => {
+    try {
+      if (!req.session.userId) {
+        return res.status(401).json({ message: 'Not authenticated' });
+      }
+
+      const orders = await storage.getOrdersByUserId(req.session.userId);
+      res.json({ orders });
+    } catch (error: any) {
+      res.status(400).json({ message: error.message || 'Failed to fetch orders' });
+    }
+  });
+
+  app.get('/api/orders/:orderId', async (req, res) => {
+    try {
+      if (!req.session.userId) {
+        return res.status(401).json({ message: 'Not authenticated' });
+      }
+
+      const order = await storage.getOrderById(req.params.orderId, req.session.userId);
+      if (!order) {
+        return res.status(404).json({ message: 'Order not found' });
+      }
+
+      const items = await storage.getOrderItems(order.id);
+      res.json({ order, items });
+    } catch (error: any) {
+      res.status(400).json({ message: error.message || 'Failed to fetch order' });
+    }
+  });
+
+  // Coupon routes
+  app.post('/api/coupons/validate', async (req, res) => {
+    try {
+      if (!req.session.userId) {
+        return res.status(401).json({ message: 'Not authenticated' });
+      }
+
+      const { code, subtotal } = req.body;
+      
+      if (!code) {
+        return res.status(400).json({ message: 'Coupon code is required' });
+      }
+
+      const subtotalNum = parseFloat(subtotal) || 0;
+      const validation = await storage.validateCoupon(code, req.session.userId, subtotalNum);
+      
+      if (!validation.valid) {
+        return res.status(400).json({ message: validation.error });
+      }
+
+      const coupon = validation.coupon!;
+      let discount = 0;
+      
+      if (coupon.discountType === 'percentage') {
+        discount = (subtotalNum * coupon.discountValue) / 100;
+        if (coupon.maxDiscount && discount > coupon.maxDiscount) {
+          discount = coupon.maxDiscount;
+        }
+      } else {
+        discount = coupon.discountValue;
+      }
+
+      // Make sure discount doesn't exceed subtotal
+      if (discount > subtotalNum) {
+        discount = subtotalNum;
+      }
+
+      res.json({ 
+        valid: true, 
+        discount,
+        coupon: {
+          code: coupon.code,
+          description: coupon.description,
+          discountType: coupon.discountType,
+          discountValue: coupon.discountValue,
+        }
+      });
+    } catch (error: any) {
+      console.error('Coupon validation error:', error);
+      res.status(400).json({ message: error.message || 'Coupon validation failed' });
+    }
+  });
+
   const httpServer = createServer(app);
 
   return httpServer;

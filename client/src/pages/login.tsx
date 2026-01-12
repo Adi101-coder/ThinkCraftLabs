@@ -18,7 +18,7 @@ export default function Login() {
 
         try {
             await login(username, password);
-            setLocation("/profile");
+            setLocation("/");
         } catch (err: any) {
             setError(err.message || "Login failed. Please try again.");
         } finally {

@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { useAuth } from './AuthContext';
 
 interface Product {
   id: number;
@@ -29,46 +30,65 @@ interface ShopContextType {
 
 const ShopContext = createContext<ShopContextType | undefined>(undefined);
 
+// Helper to get storage key based on user
+const getStorageKey = (userId: string | null, type: 'cart' | 'wishlist') => {
+  if (userId) {
+    return `${type}_${userId}`;
+  }
+  return `${type}_guest`;
+};
+
 export function ShopProvider({ children }: { children: ReactNode }) {
+  const { user, isLoading: authLoading } = useAuth();
   const [cart, setCart] = useState<CartItem[]>([]);
   const [wishlist, setWishlist] = useState<Product[]>([]);
+  const [isInitialized, setIsInitialized] = useState(false);
 
-  // Load from localStorage on mount
+  // Load cart and wishlist when user changes or on initial load
   useEffect(() => {
-    const savedCart = localStorage.getItem('cart');
-    const savedWishlist = localStorage.getItem('wishlist');
-    
-    if (savedCart) {
-      setCart(JSON.parse(savedCart));
-    }
-    if (savedWishlist) {
-      setWishlist(JSON.parse(savedWishlist));
-    }
-  }, []);
+    if (authLoading) return;
 
-  // Save to localStorage whenever cart changes
-  useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(cart));
-  }, [cart]);
+    const userId = user?.id || null;
+    const cartKey = getStorageKey(userId, 'cart');
+    const wishlistKey = getStorageKey(userId, 'wishlist');
 
-  // Save to localStorage whenever wishlist changes
+    const savedCart = localStorage.getItem(cartKey);
+    const savedWishlist = localStorage.getItem(wishlistKey);
+
+    setCart(savedCart ? JSON.parse(savedCart) : []);
+    setWishlist(savedWishlist ? JSON.parse(savedWishlist) : []);
+    setIsInitialized(true);
+  }, [user?.id, authLoading]);
+
+  // Save cart to localStorage whenever it changes
   useEffect(() => {
-    localStorage.setItem('wishlist', JSON.stringify(wishlist));
-  }, [wishlist]);
+    if (!isInitialized || authLoading) return;
+
+    const userId = user?.id || null;
+    const cartKey = getStorageKey(userId, 'cart');
+    localStorage.setItem(cartKey, JSON.stringify(cart));
+  }, [cart, user?.id, isInitialized, authLoading]);
+
+  // Save wishlist to localStorage whenever it changes
+  useEffect(() => {
+    if (!isInitialized || authLoading) return;
+
+    const userId = user?.id || null;
+    const wishlistKey = getStorageKey(userId, 'wishlist');
+    localStorage.setItem(wishlistKey, JSON.stringify(wishlist));
+  }, [wishlist, user?.id, isInitialized, authLoading]);
 
   const addToCart = (product: Product, size: string) => {
     setCart(prevCart => {
       const existingItem = prevCart.find(item => item.id === product.id && item.size === size);
       
       if (existingItem) {
-        // Update quantity if item already exists
         return prevCart.map(item =>
           item.id === product.id && item.size === size
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
       } else {
-        // Add new item
         return [...prevCart, { ...product, size, quantity: 1 }];
       }
     });

@@ -12,6 +12,8 @@ import Work from "@/pages/work";
 import About from "@/pages/about";
 import Wishlist from "@/pages/wishlist";
 import Cart from "@/pages/cart";
+import Checkout from "@/pages/checkout";
+import OrderConfirmation from "@/pages/order-confirmation";
 import Profile from "@/pages/profile";
 import Login from "@/pages/login";
 import Signup from "@/pages/signup";
@@ -26,6 +28,8 @@ function Router() {
       <Route path="/about" component={About} />
       <Route path="/wishlist" component={Wishlist} />
       <Route path="/cart" component={Cart} />
+      <Route path="/checkout" component={Checkout} />
+      <Route path="/order-confirmation/:orderId" component={OrderConfirmation} />
       <Route path="/profile" component={Profile} />
       <Route path="/login" component={Login} />
       <Route path="/signup" component={Signup} />

@@ -31,7 +31,7 @@ export default function Signup() {
 
         try {
             await signup(username, email, password);
-            setLocation("/profile");
+            setLocation("/");
         } catch (err: any) {
             setError(err.message || "Signup failed. Please try again.");
         } finally {

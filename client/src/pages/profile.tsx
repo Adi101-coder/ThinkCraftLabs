@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/contexts/AuthContext";
 import { useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import type { Order } from "@shared/schema";
 
 export default function Profile() {
     const { user, isAuthenticated, logout } = useAuth();
@@ -14,6 +16,18 @@ export default function Profile() {
             setLocation("/login");
         }
     }, [isAuthenticated, setLocation]);
+
+    const { data: ordersData } = useQuery({
+        queryKey: ["orders"],
+        queryFn: async () => {
+            const response = await fetch("/api/orders", {
+                credentials: "include",
+            });
+            if (!response.ok) throw new Error("Failed to fetch orders");
+            return response.json() as Promise<{ orders: Order[] }>;
+        },
+        enabled: isAuthenticated,
+    });
 
     const handleLogout = () => {
         logout();
@@ -39,7 +53,7 @@ export default function Profile() {
                             My Profile
                         </h1>
                         <p className="text-lg text-gray-600 max-w-2xl mb-12">
-                            Manage your account and preferences
+                            Welcome back, {user.username}!
                         </p>
                     </motion.div>
 
@@ -116,7 +130,7 @@ export default function Profile() {
                                         </div>
                                     </div>
                                     <h3 className="text-lg font-semibold text-gray-900 mb-2">Orders</h3>
-                                    <p className="text-gray-600 text-sm">Track your orders</p>
+                                    <p className="text-gray-600 text-sm">{ordersData?.orders.length || 0} total orders</p>
                                 </div>
 
                                 <div className="bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-all cursor-pointer group">
@@ -131,6 +145,64 @@ export default function Profile() {
                                     <h3 className="text-lg font-semibold text-gray-900 mb-2">Settings</h3>
                                     <p className="text-gray-600 text-sm">Manage preferences</p>
                                 </div>
+                            </div>
+
+                            {/* Order History */}
+                            <div className="mt-8">
+                                <h2 className="text-2xl font-bold text-gray-900 mb-6">Your Orders</h2>
+                                {ordersData && ordersData.orders.length > 0 ? (
+                                    <div className="space-y-4">
+                                        {ordersData.orders.map((order) => (
+                                            <Link key={order.id} href={`/order-confirmation/${order.id}`}>
+                                                <div className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-all cursor-pointer">
+                                                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                                                        <div>
+                                                            <p className="font-semibold text-gray-900 mb-1">
+                                                                Order #{order.orderNumber}
+                                                            </p>
+                                                            <p className="text-sm text-gray-600">
+                                                                {new Date(order.createdAt).toLocaleDateString('en-US', {
+                                                                    year: 'numeric',
+                                                                    month: 'long',
+                                                                    day: 'numeric'
+                                                                })}
+                                                            </p>
+                                                        </div>
+                                                        <div className="flex items-center gap-4">
+                                                            <div className="text-right">
+                                                                <p className="text-sm text-gray-600 mb-1">Total</p>
+                                                                <p className="font-bold text-[#ff6a00]">
+                                                                    ${order.totalAmount.toFixed(2)}
+                                                                </p>
+                                                            </div>
+                                                            <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                                                                order.status === 'delivered' ? 'bg-green-100 text-green-800' :
+                                                                order.status === 'shipped' ? 'bg-blue-100 text-blue-800' :
+                                                                order.status === 'processing' ? 'bg-yellow-100 text-yellow-800' :
+                                                                order.status === 'cancelled' ? 'bg-red-100 text-red-800' :
+                                                                'bg-gray-100 text-gray-800'
+                                                            }`}>
+                                                                {order.status}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </Link>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className="bg-gray-50 border border-gray-200 rounded-xl p-8 text-center">
+                                        <svg className="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                        </svg>
+                                        <p className="text-gray-500 mb-4">No orders yet</p>
+                                        <Link href="/shop">
+                                            <button className="px-6 py-2 bg-[#ff6a00] text-white rounded-lg hover:bg-[#ff7f33] transition-colors">
+                                                Start Shopping
+                                            </button>
+                                        </Link>
+                                    </div>
+                                )}
                             </div>
                         </motion.div>
                     </div>

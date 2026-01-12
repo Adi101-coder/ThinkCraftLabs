@@ -116,9 +116,11 @@ export default function Cart() {
                                             </div>
                                         </div>
                                     </div>
-                                    <button className="w-full px-5 sm:px-6 py-3 text-sm sm:text-base bg-[#ff6a00] text-white rounded-lg font-semibold hover:bg-[#ff7f33] transition-colors mb-3">
-                                        Proceed to Checkout
-                                    </button>
+                                    <Link href="/checkout">
+                                        <button className="w-full px-5 sm:px-6 py-3 text-sm sm:text-base bg-[#ff6a00] text-white rounded-lg font-semibold hover:bg-[#ff7f33] transition-colors mb-3">
+                                            Proceed to Checkout
+                                        </button>
+                                    </Link>
                                     <button
                                         onClick={clearCart}
                                         className="w-full px-5 sm:px-6 py-3 text-sm sm:text-base border-2 border-gray-200 rounded-lg hover:border-red-500 hover:text-red-500 transition-colors"
