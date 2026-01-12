@@ -1,0 +1,15 @@
+# Render Blueprint - Full Stack Deployment
+services:
+  - type: web
+    name: thinkcraft-lab
+    env: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true

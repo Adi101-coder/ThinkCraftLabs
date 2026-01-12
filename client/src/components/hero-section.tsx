@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { Link } from 'wouter';
 import { useGSAP } from '@/hooks/use-gsap';
 
 export default function HeroSection() {
@@ -130,13 +131,15 @@ export default function HeroSection() {
         </div>
 
         <div className="mt-8 sm:mt-12 md:mt-16 text-left">
-          <div className="inline-flex items-center bg-black text-white px-3 py-4 sm:px-4 sm:py-6 rounded-full hover:bg-gray-800 transition-colors cursor-pointer">
-            <span className="text-xs sm:text-sm font-medium">
-              <span className="hidden sm:inline">LEARN MORE ABOUT OUR DESIGN & 3D PRINTING APPROACH</span>
-              <span className="sm:hidden">LEARN MORE</span>
-            </span>
-            <i className="fas fa-arrow-right ml-2"></i>
-          </div>
+          <Link href="/work">
+            <div className="inline-flex items-center bg-black text-white px-3 py-4 sm:px-4 sm:py-6 rounded-full hover:bg-gray-800 transition-colors cursor-pointer">
+              <span className="text-xs sm:text-sm font-medium">
+                <span className="hidden sm:inline">LEARN MORE ABOUT OUR DESIGN & 3D PRINTING APPROACH</span>
+                <span className="sm:hidden">LEARN MORE</span>
+              </span>
+              <i className="fas fa-arrow-right ml-2"></i>
+            </div>
+          </Link>
         </div>
 
         <div className="mt-8 sm:mt-12 text-center opacity-70">
