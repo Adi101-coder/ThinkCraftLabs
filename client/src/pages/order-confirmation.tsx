@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { useRoute, useLocation } from "wouter";
 import Navigation from "@/components/navigation";
 import Footer from "@/components/footer";
@@ -66,7 +65,7 @@ export default function OrderConfirmation() {
     return (
         <div className="min-h-screen bg-white">
             <Navigation />
-            
+
             <main className="pt-24 sm:pt-28 md:pt-32 pb-12 sm:pb-16 px-3 sm:px-4 md:px-6 lg:px-8">
                 <div className="max-w-4xl mx-auto">
                     <motion.div
@@ -99,8 +98,8 @@ export default function OrderConfirmation() {
                         <div className="bg-white border border-gray-200 rounded-2xl p-6">
                             <h2 className="text-2xl font-bold text-gray-900 mb-6">Order Items</h2>
                             <div className="space-y-4">
-                                {items.map((item) => (
-                                    <div key={item.id} className="flex gap-4 pb-4 border-b border-gray-200 last:border-0">
+                                {items.map((item, index) => (
+                                    <div key={index} className="flex gap-4 pb-4 border-b border-gray-200 last:border-0">
                                         <img
                                             src={item.productImage}
                                             alt={item.productName}

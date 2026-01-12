@@ -3,7 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import session from "express-session";
 import bcrypt from "bcryptjs";
-import { insertUserSchema } from "@shared/schema";
+import './db'; // Initialize MongoDB connection
 
 declare module 'express-session' {
   interface SessionData {
@@ -29,9 +29,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Auth routes
   app.post('/api/auth/signup', async (req, res) => {
     try {
-      const { username, email, password } = insertUserSchema.parse(req.body);
+      const { username, email, password } = req.body;
 
-      // Check if user already exists
+      if (!username || !email || !password) {
+        return res.status(400).json({ message: 'All fields are required' });
+      }
+
       const existingUser = await storage.getUserByUsername(username);
       if (existingUser) {
         return res.status(400).json({ message: 'Username already exists' });
@@ -42,15 +45,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: 'Email already exists' });
       }
 
-      // Create user
       const user = await storage.createUser({ username, email, password });
+      req.session.userId = user._id.toString();
 
-      // Set session
-      req.session.userId = user.id;
-
-      // Return user without password
-      const { password: _, ...userWithoutPassword } = user;
-      res.json({ user: userWithoutPassword });
+      res.json({ 
+        user: { 
+          id: user._id, 
+          username: user.username, 
+          email: user.email 
+        } 
+      });
     } catch (error: any) {
       res.status(400).json({ message: error.message || 'Signup failed' });
     }
@@ -70,12 +74,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ message: 'Invalid credentials' });
       }
 
-      // Set session
-      req.session.userId = user.id;
+      req.session.userId = user._id.toString();
 
-      // Return user without password
-      const { password: _, ...userWithoutPassword } = user;
-      res.json({ user: userWithoutPassword });
+      res.json({ 
+        user: { 
+          id: user._id, 
+          username: user.username, 
+          email: user.email 
+        } 
+      });
     } catch (error: any) {
       res.status(400).json({ message: error.message || 'Login failed' });
     }
@@ -100,8 +107,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return res.status(401).json({ message: 'User not found' });
     }
 
-    const { password: _, ...userWithoutPassword } = user;
-    res.json({ user: userWithoutPassword });
+    res.json({ 
+      user: { 
+        id: user._id, 
+        username: user.username, 
+        email: user.email 
+      } 
+    });
   });
 
   // Order routes
@@ -123,7 +135,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
         productName: item.name,
         productPrice: parseFloat(item.price),
         productImage: item.image,
-        productDescription: item.desc || '',
         size: item.size,
         quantity: item.quantity,
       }));
@@ -164,67 +175,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: 'Order not found' });
       }
 
-      const items = await storage.getOrderItems(order.id);
-      res.json({ order, items });
+      res.json({ order, items: order.items });
     } catch (error: any) {
       res.status(400).json({ message: error.message || 'Failed to fetch order' });
     }
   });
 
-  // Coupon routes
-  app.post('/api/coupons/validate', async (req, res) => {
-    try {
-      if (!req.session.userId) {
-        return res.status(401).json({ message: 'Not authenticated' });
-      }
-
-      const { code, subtotal } = req.body;
-      
-      if (!code) {
-        return res.status(400).json({ message: 'Coupon code is required' });
-      }
-
-      const subtotalNum = parseFloat(subtotal) || 0;
-      const validation = await storage.validateCoupon(code, req.session.userId, subtotalNum);
-      
-      if (!validation.valid) {
-        return res.status(400).json({ message: validation.error });
-      }
-
-      const coupon = validation.coupon!;
-      let discount = 0;
-      
-      if (coupon.discountType === 'percentage') {
-        discount = (subtotalNum * coupon.discountValue) / 100;
-        if (coupon.maxDiscount && discount > coupon.maxDiscount) {
-          discount = coupon.maxDiscount;
-        }
-      } else {
-        discount = coupon.discountValue;
-      }
-
-      // Make sure discount doesn't exceed subtotal
-      if (discount > subtotalNum) {
-        discount = subtotalNum;
-      }
-
-      res.json({ 
-        valid: true, 
-        discount,
-        coupon: {
-          code: coupon.code,
-          description: coupon.description,
-          discountType: coupon.discountType,
-          discountValue: coupon.discountValue,
-        }
-      });
-    } catch (error: any) {
-      console.error('Coupon validation error:', error);
-      res.status(400).json({ message: error.message || 'Coupon validation failed' });
-    }
-  });
-
   const httpServer = createServer(app);
-
   return httpServer;
 }

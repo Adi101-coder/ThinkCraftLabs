@@ -153,7 +153,7 @@ export default function Profile() {
                                 {ordersData && ordersData.orders.length > 0 ? (
                                     <div className="space-y-4">
                                         {ordersData.orders.map((order) => (
-                                            <Link key={order.id} href={`/order-confirmation/${order.id}`}>
+                                            <Link key={order._id || order.id} href={`/order-confirmation/${order._id || order.id}`}>
                                                 <div className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-all cursor-pointer">
                                                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                                                         <div>
