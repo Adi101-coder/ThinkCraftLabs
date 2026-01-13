@@ -145,7 +145,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         mappedCartItems
       );
 
-      res.json({ order });
+      // Convert MongoDB document to plain object with id field
+      const orderResponse = {
+        ...order.toObject(),
+        id: order._id.toString(),
+      };
+
+      res.json({ order: orderResponse });
     } catch (error: any) {
       res.status(400).json({ message: error.message || 'Order creation failed' });
     }

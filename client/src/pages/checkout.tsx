@@ -65,7 +65,7 @@ export default function Checkout() {
                 title: "Order placed successfully!",
                 description: `Order #${data.order.orderNumber}`,
             });
-            setLocation(`/order-confirmation/${data.order._id}`);
+            setLocation(`/order-confirmation/${data.order.id}`);
         },
         onError: (error: Error) => {
             toast({
