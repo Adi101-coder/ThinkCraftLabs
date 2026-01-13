@@ -20,7 +20,7 @@ export default function Shop() {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const { addToCart, addToWishlist, isInWishlist } = useShop();
     
-    const PRODUCTS_PER_PAGE = 10;
+    const PRODUCTS_PER_PAGE = 9;
 
     const showNotification = (message: string, type: 'success' | 'error' = 'success') => {
         setNotification({ message, type });
@@ -199,7 +199,7 @@ export default function Shop() {
                     </div>
 
                     {/* Products Grid */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
+                    <div className="flex flex-wrap justify-center gap-4 sm:gap-6 md:gap-8">
                         {paginatedProducts.map((product) => (
                             <div
                                 key={product.id}
@@ -209,7 +209,7 @@ export default function Shop() {
                                     const img = new Image();
                                     img.src = product.image;
                                 }}
-                                className="group bg-white border border-gray-200 rounded-xl sm:rounded-2xl overflow-hidden hover:shadow-lg cursor-pointer"
+                                className="group bg-white border border-gray-200 rounded-xl sm:rounded-2xl overflow-hidden hover:shadow-lg cursor-pointer w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-22px)]"
                             >
                                 {/* Product Image */}
                                 <div className="aspect-square bg-gray-100 relative overflow-hidden">
