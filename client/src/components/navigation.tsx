@@ -100,6 +100,15 @@ export default function Navigation() {
                   <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
                 </button>
               </Link>
+              <Link href="/students">
+                <button className="nav-link text-foreground hover:text-primary transition-all duration-300 relative group px-3 py-2 rounded-lg overflow-hidden cursor-pointer"
+                  data-testid="nav-students"
+                >
+                  <span className="relative z-10">Students</span>
+                  <span className="absolute inset-0 bg-primary/10 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
+                </button>
+              </Link>
               <button
                 onClick={() => scrollToSection('footer')}
                 className="nav-link text-foreground hover:text-primary transition-all duration-300 relative group px-3 py-2 rounded-lg overflow-hidden"
@@ -137,7 +146,7 @@ export default function Navigation() {
                   )}
                 </button>
               </Link>
-              <Link href="/profile">
+              <Link href={isAuthenticated ? "/profile" : "/login"}>
                 <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors relative group">
                   {isAuthenticated ? (
                     <div className="flex items-center gap-2">
@@ -149,11 +158,9 @@ export default function Navigation() {
                       </span>
                     </div>
                   ) : (
-                    <Link href="/login">
-                      <span className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-[#ff6a00] transition-colors">
-                        Sign In
-                      </span>
-                    </Link>
+                    <span className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-[#ff6a00] transition-colors">
+                      Sign In
+                    </span>
                   )}
                 </button>
               </Link>
@@ -320,6 +327,21 @@ export default function Navigation() {
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   About Us
+                </span>
+              </Link>
+
+              <Link href="/students">
+                <span
+                  className={`w-full text-left px-4 py-4 text-lg font-medium text-gray-900 hover:text-[#ff6a00] hover:bg-orange-50 rounded-xl transition-all duration-200 transform block cursor-pointer ${isMobileMenuOpen
+                    ? 'translate-x-0 opacity-100'
+                    : 'translate-x-8 opacity-0'
+                    }`}
+                  style={{
+                    transitionDelay: isMobileMenuOpen ? '175ms' : '0ms'
+                  }}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Students
                 </span>
               </Link>
 

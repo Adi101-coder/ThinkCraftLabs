@@ -70,14 +70,6 @@ Render (Full Stack)          MongoDB Atlas (Database)
 | `SESSION_SECRET` | ✅ Yes | Secret for session encryption |
 | `NODE_ENV` | ✅ Yes | Set to `production` |
 
-### Example Values:
-```
-MONGODB_URI=mongodb+srv://adit:mypassword123@cluster0.abc123.mongodb.net/thinkcraft?retryWrites=true&w=majority
-SESSION_SECRET=thinkcraft-super-secret-2024
-NODE_ENV=production
-```
-
----
 
 ## Free Tier Limits
 
