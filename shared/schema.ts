@@ -36,6 +36,12 @@ export interface Order {
   createdAt: Date;
 }
 
+export interface EventRegistration {
+  userId: string;
+  username: string;
+  registeredAt: string;
+}
+
 export interface Event {
   _id: string;
   title: string;
@@ -47,6 +53,7 @@ export interface Event {
   isLive: boolean;
   createdBy: string;
   createdByUsername: string;
+  registrations: EventRegistration[];
   createdAt: string;
   updatedAt: string;
 }

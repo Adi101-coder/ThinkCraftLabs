@@ -140,6 +140,58 @@ class MongoStorage {
       { new: true }
     );
   }
+
+  // Event registration methods
+  async registerForEvent(eventId: string, userId: string, username: string): Promise<IEvent | null> {
+    // Check if already registered
+    const event = await Event.findById(eventId);
+    if (!event) return null;
+    
+    const alreadyRegistered = event.registrations.some(
+      (reg) => reg.userId.toString() === userId
+    );
+    
+    if (alreadyRegistered) {
+      throw new Error('Already registered for this event');
+    }
+
+    return await Event.findByIdAndUpdate(
+      eventId,
+      {
+        $push: {
+          registrations: {
+            userId,
+            username,
+            registeredAt: new Date(),
+          },
+        },
+      },
+      { new: true }
+    );
+  }
+
+  async unregisterFromEvent(eventId: string, userId: string): Promise<IEvent | null> {
+    return await Event.findByIdAndUpdate(
+      eventId,
+      {
+        $pull: {
+          registrations: { userId },
+        },
+      },
+      { new: true }
+    );
+  }
+
+  async getEventRegistrations(eventId: string): Promise<IEvent | null> {
+    return await Event.findById(eventId).select('registrations');
+  }
+
+  async isUserRegistered(eventId: string, userId: string): Promise<boolean> {
+    const event = await Event.findById(eventId);
+    if (!event) return false;
+    return event.registrations.some((reg) => reg.userId.toString() === userId);
+  }
 }
+
 
 export const storage = new MongoStorage();

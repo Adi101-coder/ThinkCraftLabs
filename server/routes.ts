@@ -302,6 +302,69 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Event registration routes
+  app.post('/api/events/:eventId/register', async (req, res) => {
+    try {
+      if (!req.session.userId) {
+        return res.status(401).json({ message: 'Not authenticated' });
+      }
+
+      const user = await storage.getUser(req.session.userId);
+      if (!user) {
+        return res.status(401).json({ message: 'User not found' });
+      }
+
+      const event = await storage.registerForEvent(
+        req.params.eventId,
+        req.session.userId,
+        user.username
+      );
+
+      if (!event) {
+        return res.status(404).json({ message: 'Event not found' });
+      }
+
+      res.json({ event, message: 'Successfully registered for event' });
+    } catch (error: any) {
+      res.status(400).json({ message: error.message || 'Failed to register for event' });
+    }
+  });
+
+  app.delete('/api/events/:eventId/register', async (req, res) => {
+    try {
+      if (!req.session.userId) {
+        return res.status(401).json({ message: 'Not authenticated' });
+      }
+
+      const event = await storage.unregisterFromEvent(
+        req.params.eventId,
+        req.session.userId
+      );
+
+      if (!event) {
+        return res.status(404).json({ message: 'Event not found' });
+      }
+
+      res.json({ event, message: 'Successfully unregistered from event' });
+    } catch (error: any) {
+      res.status(400).json({ message: error.message || 'Failed to unregister from event' });
+    }
+  });
+
+  app.get('/api/events/:eventId/registrations', async (req, res) => {
+    try {
+      const event = await storage.getEventRegistrations(req.params.eventId);
+      
+      if (!event) {
+        return res.status(404).json({ message: 'Event not found' });
+      }
+
+      res.json({ registrations: event.registrations });
+    } catch (error: any) {
+      res.status(400).json({ message: error.message || 'Failed to fetch registrations' });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Navigation from "@/components/navigation";
 import Footer from "@/components/footer";
 import { useAuth } from "@/contexts/AuthContext";
-import { Plus, Calendar, MapPin, Trash2, Clock, Users, Trophy, BookOpen, Wrench } from "lucide-react";
+import { Plus, Calendar, MapPin, Trash2, Clock, Users, Trophy, BookOpen, Wrench, UserPlus, UserMinus } from "lucide-react";
 import type { Event } from "../../../shared/schema";
 
 const categoryIcons: Record<string, typeof Calendar> = {
@@ -54,6 +54,7 @@ export default function Students() {
     const [liveEvents, setLiveEvents] = useState<Event[]>([]);
     const [activeCategory, setActiveCategory] = useState<string>("all");
     const [isLoading, setIsLoading] = useState(true);
+    const [registeringId, setRegisteringId] = useState<string | null>(null);
 
     useEffect(() => {
         fetchEvents();
@@ -92,6 +93,54 @@ export default function Students() {
         }
     };
 
+    const handleRegister = async (eventId: string) => {
+        if (!isAuthenticated) {
+            window.location.href = "/login";
+            return;
+        }
+        setRegisteringId(eventId);
+        try {
+            const response = await fetch(`/api/events/${eventId}/register`, {
+                method: "POST",
+                credentials: "include",
+            });
+            if (response.ok) {
+                fetchEvents();
+                fetchLiveEvents();
+            } else {
+                const data = await response.json();
+                alert(data.message || "Failed to register");
+            }
+        } catch (error) {
+            console.error("Failed to register:", error);
+        } finally {
+            setRegisteringId(null);
+        }
+    };
+
+    const handleUnregister = async (eventId: string) => {
+        setRegisteringId(eventId);
+        try {
+            const response = await fetch(`/api/events/${eventId}/register`, {
+                method: "DELETE",
+                credentials: "include",
+            });
+            if (response.ok) {
+                fetchEvents();
+                fetchLiveEvents();
+            }
+        } catch (error) {
+            console.error("Failed to unregister:", error);
+        } finally {
+            setRegisteringId(null);
+        }
+    };
+
+    const isUserRegistered = (event: Event) => {
+        if (!user) return false;
+        return event.registrations?.some((reg) => reg.userId === user.id) || false;
+    };
+
     const filteredEvents = activeCategory === "all" ? events : events.filter((e) => e.category === activeCategory);
     const formatDate = (dateStr: string) => new Date(dateStr).toLocaleDateString("en-US", { weekday: "short", year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
 
@@ -125,6 +174,8 @@ export default function Students() {
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                 {liveEvents.map((event) => {
                                     const IconComponent = categoryIcons[event.category] || Calendar;
+                                    const registered = isUserRegistered(event);
+                                    const registrationCount = event.registrations?.length || 0;
                                     return (
                                         <div key={event._id} className="relative bg-gradient-to-br from-emerald-50 to-teal-50 border-2 border-emerald-200 rounded-2xl p-6 hover:shadow-xl transition-all">
                                             <div className="absolute top-4 right-4 flex items-center gap-1 text-emerald-600 text-sm font-medium">
@@ -136,9 +187,36 @@ export default function Students() {
                                             </div>
                                             <h3 className="text-xl font-bold text-gray-900 mb-2">{event.title}</h3>
                                             <p className="text-gray-600 mb-4 line-clamp-2">{event.description}</p>
-                                            <div className="flex items-center gap-4 text-sm text-gray-500">
+                                            <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
                                                 <div className="flex items-center gap-1"><Clock size={16} />{formatDate(event.date)}</div>
                                                 {event.location && <div className="flex items-center gap-1"><MapPin size={16} />{event.location}</div>}
+                                            </div>
+                                            <div className="flex items-center justify-between pt-4 border-t border-emerald-200">
+                                                <div className="flex items-center gap-2 text-sm text-gray-600">
+                                                    <Users size={16} />
+                                                    <span>{registrationCount} registered</span>
+                                                </div>
+                                                {event.createdBy !== user?.id && (
+                                                    registered ? (
+                                                        <button
+                                                            onClick={() => handleUnregister(event._id)}
+                                                            disabled={registeringId === event._id}
+                                                            className="flex items-center gap-1 px-4 py-2 bg-gray-200 text-gray-700 rounded-full text-sm font-medium hover:bg-gray-300 transition-colors"
+                                                        >
+                                                            <UserMinus size={16} />
+                                                            {registeringId === event._id ? "..." : "Leave"}
+                                                        </button>
+                                                    ) : (
+                                                        <button
+                                                            onClick={() => handleRegister(event._id)}
+                                                            disabled={registeringId === event._id}
+                                                            className="flex items-center gap-1 px-4 py-2 bg-emerald-500 text-white rounded-full text-sm font-medium hover:bg-emerald-600 transition-colors"
+                                                        >
+                                                            <UserPlus size={16} />
+                                                            {registeringId === event._id ? "..." : "Join"}
+                                                        </button>
+                                                    )
+                                                )}
                                             </div>
                                             {isAuthenticated && user && event.createdBy === user.id && (
                                                 <button onClick={() => handleDelete(event._id)} className="absolute bottom-4 right-4 p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
@@ -179,6 +257,8 @@ export default function Students() {
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                 {filteredEvents.map((event) => {
                                     const IconComponent = categoryIcons[event.category] || Calendar;
+                                    const registered = isUserRegistered(event);
+                                    const registrationCount = event.registrations?.length || 0;
                                     return (
                                         <div key={event._id} className="bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-lg hover:border-gray-300 transition-all group">
                                             {event.images && event.images.length > 0 && (
@@ -192,9 +272,36 @@ export default function Students() {
                                             </div>
                                             <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-black">{event.title}</h3>
                                             <p className="text-gray-600 text-sm mb-4 line-clamp-2">{event.description}</p>
-                                            <div className="flex flex-col gap-2 text-sm text-gray-500">
+                                            <div className="flex flex-col gap-2 text-sm text-gray-500 mb-4">
                                                 <div className="flex items-center gap-2"><Clock size={14} />{formatDate(event.date)}</div>
                                                 {event.location && <div className="flex items-center gap-2"><MapPin size={14} />{event.location}</div>}
+                                            </div>
+                                            <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                                                <div className="flex items-center gap-2 text-sm text-gray-600">
+                                                    <Users size={16} />
+                                                    <span>{registrationCount} registered</span>
+                                                </div>
+                                                {event.createdBy !== user?.id && (
+                                                    registered ? (
+                                                        <button
+                                                            onClick={() => handleUnregister(event._id)}
+                                                            disabled={registeringId === event._id}
+                                                            className="flex items-center gap-1 px-4 py-2 bg-gray-200 text-gray-700 rounded-full text-sm font-medium hover:bg-gray-300 transition-colors"
+                                                        >
+                                                            <UserMinus size={16} />
+                                                            {registeringId === event._id ? "..." : "Leave"}
+                                                        </button>
+                                                    ) : (
+                                                        <button
+                                                            onClick={() => handleRegister(event._id)}
+                                                            disabled={registeringId === event._id}
+                                                            className="flex items-center gap-1 px-4 py-2 bg-[#ff6a00] text-white rounded-full text-sm font-medium hover:bg-[#e55f00] transition-colors"
+                                                        >
+                                                            <UserPlus size={16} />
+                                                            {registeringId === event._id ? "..." : "Join"}
+                                                        </button>
+                                                    )
+                                                )}
                                             </div>
                                             {isAuthenticated && user && event.createdBy === user.id && (
                                                 <button onClick={() => handleDelete(event._id)} className="mt-4 flex items-center gap-1 text-red-500 hover:text-red-700 text-sm font-medium">
