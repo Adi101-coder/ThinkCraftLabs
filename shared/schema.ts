@@ -36,6 +36,21 @@ export interface Order {
   createdAt: Date;
 }
 
+export interface Event {
+  _id: string;
+  title: string;
+  description: string;
+  category: 'workshop' | 'competition' | 'course' | 'other';
+  images: string[];
+  date: string;
+  location: string;
+  isLive: boolean;
+  createdBy: string;
+  createdByUsername: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface InsertUser {
   username: string;
   email: string;
@@ -50,4 +65,14 @@ export interface InsertOrder {
   shippingCountry: string;
   paymentMethod: string;
   couponCode?: string;
+}
+
+export interface InsertEvent {
+  title: string;
+  description: string;
+  category: 'workshop' | 'competition' | 'course' | 'other';
+  images: string[];
+  date: string;
+  location: string;
+  isLive: boolean;
 }

@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
-import { User, Order } from './models';
-import type { IUser, IOrder, IOrderItem } from './models';
+import { User, Order, Event } from './models';
+import type { IUser, IOrder, IOrderItem, IEvent } from './models';
 
 export interface InsertUser {
   username: string;
@@ -84,6 +84,61 @@ class MongoStorage {
 
   async getOrderById(orderId: string, userId: string): Promise<IOrder | null> {
     return await Order.findOne({ _id: orderId, userId });
+  }
+
+  // Event methods
+  async createEvent(userId: string, username: string, eventData: {
+    title: string;
+    description: string;
+    category: 'workshop' | 'competition' | 'course' | 'other';
+    images: string[];
+    date: Date;
+    location: string;
+    isLive: boolean;
+  }): Promise<IEvent> {
+    const event = new Event({
+      ...eventData,
+      createdBy: userId,
+      createdByUsername: username,
+    });
+    return await event.save();
+  }
+
+  async getAllEvents(): Promise<IEvent[]> {
+    return await Event.find().sort({ date: 1 });
+  }
+
+  async getEventsByCategory(category: string): Promise<IEvent[]> {
+    return await Event.find({ category }).sort({ date: 1 });
+  }
+
+  async getLiveEvents(): Promise<IEvent[]> {
+    return await Event.find({ isLive: true }).sort({ date: 1 });
+  }
+
+  async getEventById(eventId: string): Promise<IEvent | null> {
+    return await Event.findById(eventId);
+  }
+
+  async deleteEvent(eventId: string, userId: string): Promise<boolean> {
+    const result = await Event.deleteOne({ _id: eventId, createdBy: userId });
+    return result.deletedCount > 0;
+  }
+
+  async updateEvent(eventId: string, userId: string, eventData: Partial<{
+    title: string;
+    description: string;
+    category: 'workshop' | 'competition' | 'course' | 'other';
+    images: string[];
+    date: Date;
+    location: string;
+    isLive: boolean;
+  }>): Promise<IEvent | null> {
+    return await Event.findOneAndUpdate(
+      { _id: eventId, createdBy: userId },
+      eventData,
+      { new: true }
+    );
   }
 }
 

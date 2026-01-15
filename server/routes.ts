@@ -191,6 +191,117 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Event routes
+  app.get('/api/events', async (req, res) => {
+    try {
+      const { category, live } = req.query;
+      let events;
+      
+      if (live === 'true') {
+        events = await storage.getLiveEvents();
+      } else if (category && typeof category === 'string') {
+        events = await storage.getEventsByCategory(category);
+      } else {
+        events = await storage.getAllEvents();
+      }
+      
+      res.json({ events });
+    } catch (error: any) {
+      res.status(400).json({ message: error.message || 'Failed to fetch events' });
+    }
+  });
+
+  app.get('/api/events/:eventId', async (req, res) => {
+    try {
+      const event = await storage.getEventById(req.params.eventId);
+      if (!event) {
+        return res.status(404).json({ message: 'Event not found' });
+      }
+      res.json({ event });
+    } catch (error: any) {
+      res.status(400).json({ message: error.message || 'Failed to fetch event' });
+    }
+  });
+
+  app.post('/api/events', async (req, res) => {
+    try {
+      if (!req.session.userId) {
+        return res.status(401).json({ message: 'Not authenticated' });
+      }
+
+      const user = await storage.getUser(req.session.userId);
+      if (!user) {
+        return res.status(401).json({ message: 'User not found' });
+      }
+
+      const { title, description, category, images, date, location, isLive } = req.body;
+
+      if (!title || !description || !category || !date || !location) {
+        return res.status(400).json({ message: 'Missing required fields' });
+      }
+
+      const event = await storage.createEvent(req.session.userId, user.username, {
+        title,
+        description,
+        category,
+        images: images || [],
+        date: new Date(date),
+        location,
+        isLive: isLive || false,
+      });
+
+      res.json({ event });
+    } catch (error: any) {
+      res.status(400).json({ message: error.message || 'Failed to create event' });
+    }
+  });
+
+  app.put('/api/events/:eventId', async (req, res) => {
+    try {
+      if (!req.session.userId) {
+        return res.status(401).json({ message: 'Not authenticated' });
+      }
+
+      const { title, description, category, images, date, location, isLive } = req.body;
+
+      const event = await storage.updateEvent(req.params.eventId, req.session.userId, {
+        title,
+        description,
+        category,
+        images,
+        date: date ? new Date(date) : undefined,
+        location,
+        isLive,
+      });
+
+      if (!event) {
+        return res.status(404).json({ message: 'Event not found or you do not have permission to edit it' });
+      }
+
+      res.json({ event });
+    } catch (error: any) {
+      res.status(400).json({ message: error.message || 'Failed to update event' });
+    }
+  });
+
+  app.delete('/api/events/:eventId', async (req, res) => {
+    try {
+      if (!req.session.userId) {
+        return res.status(401).json({ message: 'Not authenticated' });
+      }
+
+      const deleted = await storage.deleteEvent(req.params.eventId, req.session.userId);
+      
+      if (!deleted) {
+        return res.status(404).json({ message: 'Event not found or you do not have permission to delete it' });
+      }
+
+      res.json({ message: 'Event deleted successfully' });
+    } catch (error: any) {
+      res.status(400).json({ message: error.message || 'Failed to delete event' });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
