@@ -17,8 +17,14 @@ export default function Login() {
         setIsLoading(true);
 
         try {
-            await login(username, password);
-            setLocation("/");
+            const user = await login(username, password);
+            
+            // Redirect based on admin status
+            if (user.isAdmin) {
+                setLocation("/admin");
+            } else {
+                setLocation("/");
+            }
         } catch (err: any) {
             setError(err.message || "Login failed. Please try again.");
         } finally {

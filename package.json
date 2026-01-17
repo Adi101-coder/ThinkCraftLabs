@@ -8,7 +8,9 @@
     "build": "vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
     "start": "node dist/index.js",
     "preview": "vite preview",
-    "check": "tsc"
+    "check": "tsc",
+    "create-admin": "tsx server/scripts/create-admin.ts",
+    "seed-events": "tsx server/scripts/seed-events.ts"
   },
   "dependencies": {
     "@google/model-viewer": "^4.1.0",

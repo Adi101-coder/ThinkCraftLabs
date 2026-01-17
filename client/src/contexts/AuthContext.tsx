@@ -4,11 +4,12 @@ interface User {
   id: string;
   username: string;
   email: string;
+  isAdmin?: boolean;
 }
 
 interface AuthContextType {
   user: User | null;
-  login: (username: string, password: string) => Promise<void>;
+  login: (username: string, password: string) => Promise<User>;
   signup: (username: string, email: string, password: string) => Promise<void>;
   logout: () => void;
   isAuthenticated: boolean;
@@ -57,6 +58,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const data = await response.json();
     setUser(data.user);
+    return data.user; // Return user data for immediate use
   };
 
   const signup = async (username: string, email: string, password: string) => {

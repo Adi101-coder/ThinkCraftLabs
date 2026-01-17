@@ -56,7 +56,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         user: { 
           id: user._id, 
           username: user.username, 
-          email: user.email 
+          email: user.email,
+          isAdmin: user.isAdmin || false,
         } 
       });
     } catch (error: any) {
@@ -84,7 +85,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         user: { 
           id: user._id, 
           username: user.username, 
-          email: user.email 
+          email: user.email,
+          isAdmin: user.isAdmin || false,
         } 
       });
     } catch (error: any) {
@@ -115,7 +117,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       user: { 
         id: user._id, 
         username: user.username, 
-        email: user.email 
+        email: user.email,
+        isAdmin: user.isAdmin || false,
       } 
     });
   });
@@ -362,6 +365,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({ registrations: event.registrations });
     } catch (error: any) {
       res.status(400).json({ message: error.message || 'Failed to fetch registrations' });
+    }
+  });
+
+  // Admin stats endpoint
+  app.get('/api/admin/stats', async (req, res) => {
+    try {
+      const [users, events] = await Promise.all([
+        storage.getAllUsersCount(),
+        storage.getAllEvents(),
+      ]);
+
+      const totalRegistrations = events.reduce((sum, event) => sum + (event.registrations?.length || 0), 0);
+      const liveEvents = events.filter(event => event.isLive).length;
+
+      res.json({
+        totalUsers: users,
+        totalEvents: events.length,
+        totalRegistrations,
+        liveEvents,
+      });
+    } catch (error: any) {
+      res.status(400).json({ message: error.message || 'Failed to fetch stats' });
     }
   });
 

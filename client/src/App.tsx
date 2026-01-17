@@ -13,6 +13,7 @@ import Work from "@/pages/work";
 import About from "@/pages/about";
 import Students from "@/pages/students";
 import CreateEvent from "@/pages/create-event";
+import Admin from "@/pages/admin";
 import Wishlist from "@/pages/wishlist";
 import Cart from "@/pages/cart";
 import Checkout from "@/pages/checkout";
@@ -32,6 +33,7 @@ function Router() {
       <Route path="/about" component={About} />
       <Route path="/students" component={Students} />
       <Route path="/create-event" component={CreateEvent} />
+      <Route path="/admin" component={Admin} />
       <Route path="/wishlist" component={Wishlist} />
       <Route path="/cart" component={Cart} />
       <Route path="/checkout" component={Checkout} />

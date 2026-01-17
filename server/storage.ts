@@ -191,6 +191,11 @@ class MongoStorage {
     if (!event) return false;
     return event.registrations.some((reg) => reg.userId.toString() === userId);
   }
+
+  // Admin methods
+  async getAllUsersCount(): Promise<number> {
+    return await User.countDocuments();
+  }
 }
 
 
