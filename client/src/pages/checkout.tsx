@@ -7,6 +7,7 @@ import { useShop } from "@/contexts/ShopContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useMutation } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/api";
 
 // Simple coupon definitions - percentage discounts
 const COUPONS: Record<string, { discount: number; description: string }> = {
@@ -41,7 +42,7 @@ export default function Checkout() {
 
     const createOrderMutation = useMutation({
         mutationFn: async (orderData: typeof formData) => {
-            const response = await fetch("/api/orders", {
+            const response = await apiRequest("/api/orders", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -49,7 +50,6 @@ export default function Checkout() {
                     couponCode: appliedCoupon?.code,
                     cartItems: cart,
                 }),
-                credentials: "include",
             });
 
             if (!response.ok) {

@@ -4,6 +4,7 @@ import Navigation from "@/components/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { Calendar, MapPin, Clock, Image, Zap, ArrowLeft, Check, Wrench, Trophy, BookOpen, Sparkles } from "lucide-react";
 import type { Event } from "../../../shared/schema";
+import { apiRequest } from "@/lib/api";
 
 const eventTypes = [
   { value: "workshop", label: "Workshop", icon: Wrench, desc: "Hands-on learning experience" },
@@ -31,10 +32,9 @@ export default function CreateEvent() {
     if (!formData.category) return;
     setIsSubmitting(true);
     try {
-      const response = await fetch("/api/events", {
+      const response = await apiRequest("/api/events", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "include",
         body: JSON.stringify({
           ...formData,
           images: formData.images.split(",").map((url) => url.trim()).filter(Boolean),

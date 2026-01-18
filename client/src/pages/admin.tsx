@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Navigation from "@/components/navigation";
 import { Users, Calendar, TrendingUp, Activity, Eye, Trash2, UserCheck } from "lucide-react";
 import type { Event } from "../../../shared/schema";
+import { apiRequest } from "@/lib/api";
 
 interface AdminStats {
   totalUsers: number;
@@ -24,8 +25,8 @@ export default function Admin() {
   const fetchAdminData = async () => {
     try {
       const [eventsRes, statsRes] = await Promise.all([
-        fetch("/api/events"),
-        fetch("/api/admin/stats"),
+        apiRequest("/api/events"),
+        apiRequest("/api/admin/stats"),
       ]);
 
       const eventsData = await eventsRes.json();
@@ -55,9 +56,8 @@ export default function Admin() {
   const handleDeleteEvent = async (eventId: string) => {
     if (!confirm("Are you sure you want to delete this event?")) return;
     try {
-      const response = await fetch(`/api/events/${eventId}`, {
+      const response = await apiRequest(`/api/events/${eventId}`, {
         method: "DELETE",
-        credentials: "include",
       });
       if (response.ok) {
         fetchAdminData();

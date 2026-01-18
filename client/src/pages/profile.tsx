@@ -6,6 +6,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import type { Order } from "@shared/schema";
+import { apiRequest } from "@/lib/api";
 
 export default function Profile() {
     const { user, isAuthenticated, logout } = useAuth();
@@ -20,9 +21,7 @@ export default function Profile() {
     const { data: ordersData } = useQuery({
         queryKey: ["orders"],
         queryFn: async () => {
-            const response = await fetch("/api/orders", {
-                credentials: "include",
-            });
+            const response = await apiRequest("/api/orders");
             if (!response.ok) throw new Error("Failed to fetch orders");
             return response.json() as Promise<{ orders: Order[] }>;
         },

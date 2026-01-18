@@ -4,6 +4,7 @@ import Footer from "@/components/footer";
 import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import type { Order, OrderItem } from "@shared/schema";
+import { apiRequest } from "@/lib/api";
 
 export default function OrderConfirmation() {
     const [, params] = useRoute("/order-confirmation/:orderId");
@@ -13,9 +14,7 @@ export default function OrderConfirmation() {
     const { data, isLoading, error } = useQuery({
         queryKey: ["order", orderId],
         queryFn: async () => {
-            const response = await fetch(`/api/orders/${orderId}`, {
-                credentials: "include",
-            });
+            const response = await apiRequest(`/api/orders/${orderId}`);
 
             if (!response.ok) {
                 throw new Error("Failed to fetch order");

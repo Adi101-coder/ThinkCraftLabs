@@ -4,6 +4,7 @@ import Footer from "@/components/footer";
 import { useAuth } from "@/contexts/AuthContext";
 import { Plus, Calendar, MapPin, Trash2, Clock, Users, Trophy, BookOpen, Wrench, UserPlus, UserMinus } from "lucide-react";
 import type { Event } from "../../../shared/schema";
+import { apiRequest } from "@/lib/api";
 
 const categoryIcons: Record<string, typeof Calendar> = {
     workshop: Wrench,
@@ -63,7 +64,7 @@ export default function Students() {
 
     const fetchEvents = async () => {
         try {
-            const response = await fetch("/api/events");
+            const response = await apiRequest("/api/events");
             const data = await response.json();
             setEvents(data.events || []);
         } catch (error) {
@@ -75,7 +76,7 @@ export default function Students() {
 
     const fetchLiveEvents = async () => {
         try {
-            const response = await fetch("/api/events?live=true");
+            const response = await apiRequest("/api/events?live=true");
             const data = await response.json();
             setLiveEvents(data.events || []);
         } catch (error) {
@@ -86,7 +87,7 @@ export default function Students() {
     const handleDelete = async (eventId: string) => {
         if (!confirm("Are you sure you want to delete this event?")) return;
         try {
-            const response = await fetch("/api/events/" + eventId, { method: "DELETE", credentials: "include" });
+            const response = await apiRequest("/api/events/" + eventId, { method: "DELETE" });
             if (response.ok) { fetchEvents(); fetchLiveEvents(); }
         } catch (error) {
             console.error("Failed to delete event:", error);
@@ -100,9 +101,8 @@ export default function Students() {
         }
         setRegisteringId(eventId);
         try {
-            const response = await fetch(`/api/events/${eventId}/register`, {
+            const response = await apiRequest(`/api/events/${eventId}/register`, {
                 method: "POST",
-                credentials: "include",
             });
             if (response.ok) {
                 fetchEvents();
@@ -121,9 +121,8 @@ export default function Students() {
     const handleUnregister = async (eventId: string) => {
         setRegisteringId(eventId);
         try {
-            const response = await fetch(`/api/events/${eventId}/register`, {
+            const response = await apiRequest(`/api/events/${eventId}/register`, {
                 method: "DELETE",
-                credentials: "include",
             });
             if (response.ok) {
                 fetchEvents();
