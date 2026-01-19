@@ -58,6 +58,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           username: user.username, 
           email: user.email,
           isAdmin: user.isAdmin || false,
+          createdAt: user.createdAt,
         } 
       });
     } catch (error: any) {
@@ -87,6 +88,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           username: user.username, 
           email: user.email,
           isAdmin: user.isAdmin || false,
+          createdAt: user.createdAt,
         } 
       });
     } catch (error: any) {
@@ -119,6 +121,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         username: user.username, 
         email: user.email,
         isAdmin: user.isAdmin || false,
+        createdAt: user.createdAt,
       } 
     });
   });
@@ -365,6 +368,86 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({ registrations: event.registrations });
     } catch (error: any) {
       res.status(400).json({ message: error.message || 'Failed to fetch registrations' });
+    }
+  });
+
+  // User settings routes
+  app.put('/api/user/profile', async (req, res) => {
+    try {
+      if (!req.session.userId) {
+        return res.status(401).json({ message: 'Not authenticated' });
+      }
+
+      const { username, email } = req.body;
+
+      if (!username || !email) {
+        return res.status(400).json({ message: 'Username and email are required' });
+      }
+
+      // Check if username is taken by another user
+      const existingUser = await storage.getUserByUsername(username);
+      if (existingUser && existingUser._id.toString() !== req.session.userId) {
+        return res.status(400).json({ message: 'Username already taken' });
+      }
+
+      // Check if email is taken by another user
+      const existingEmail = await storage.getUserByEmail(email);
+      if (existingEmail && existingEmail._id.toString() !== req.session.userId) {
+        return res.status(400).json({ message: 'Email already taken' });
+      }
+
+      const updatedUser = await storage.updateUserProfile(req.session.userId, { username, email });
+      
+      if (!updatedUser) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+
+      res.json({ 
+        user: { 
+          id: updatedUser._id, 
+          username: updatedUser.username, 
+          email: updatedUser.email,
+          isAdmin: updatedUser.isAdmin || false,
+          createdAt: updatedUser.createdAt,
+        } 
+      });
+    } catch (error: any) {
+      res.status(400).json({ message: error.message || 'Failed to update profile' });
+    }
+  });
+
+  app.put('/api/user/password', async (req, res) => {
+    try {
+      if (!req.session.userId) {
+        return res.status(401).json({ message: 'Not authenticated' });
+      }
+
+      const { currentPassword, newPassword } = req.body;
+
+      if (!currentPassword || !newPassword) {
+        return res.status(400).json({ message: 'Current and new password are required' });
+      }
+
+      if (newPassword.length < 6) {
+        return res.status(400).json({ message: 'New password must be at least 6 characters' });
+      }
+
+      const user = await storage.getUser(req.session.userId);
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+
+      const isValidPassword = await bcrypt.compare(currentPassword, user.password);
+      if (!isValidPassword) {
+        return res.status(401).json({ message: 'Current password is incorrect' });
+      }
+
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      await storage.updateUserPassword(req.session.userId, hashedPassword);
+
+      res.json({ message: 'Password updated successfully' });
+    } catch (error: any) {
+      res.status(400).json({ message: error.message || 'Failed to update password' });
     }
   });
 

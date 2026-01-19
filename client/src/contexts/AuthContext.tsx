@@ -6,6 +6,7 @@ interface User {
   username: string;
   email: string;
   isAdmin?: boolean;
+  createdAt: Date;
 }
 
 interface AuthContextType {

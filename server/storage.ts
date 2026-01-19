@@ -51,6 +51,22 @@ class MongoStorage {
     return await user.save();
   }
 
+  async updateUserProfile(userId: string, data: { username: string; email: string }): Promise<IUser | null> {
+    return await User.findByIdAndUpdate(
+      userId,
+      { username: data.username, email: data.email },
+      { new: true }
+    );
+  }
+
+  async updateUserPassword(userId: string, hashedPassword: string): Promise<IUser | null> {
+    return await User.findByIdAndUpdate(
+      userId,
+      { password: hashedPassword },
+      { new: true }
+    );
+  }
+
   // Order methods
   async createOrder(userId: string, orderData: InsertOrder, cartItems: CartItem[]): Promise<IOrder> {
     const orderNumber = `ORD-${Date.now()}-${Math.random().toString(36).substring(2, 9).toUpperCase()}`;
