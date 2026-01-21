@@ -1,0 +1,1571 @@
+\documentclass{scrreprt}
+\usepackage{listings}
+\usepackage{underscore}
+\usepackage{graphicx}
+\usepackage[bookmarks=true]{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\hypersetup{
+    bookmarks=false,
+    pdftitle={Software Requirement Specification},
+    pdfauthor={ThinkCraft Lab Team},
+    pdfsubject={E-commerce Platform},
+    pdfkeywords={3D Printing, E-commerce, Events, React, Node.js},
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=black,
+    filecolor=black,
+    urlcolor=purple,
+    linktoc=page
+}
+\def\myversion{1.0 }
+\date{}
+
+\begin{document}
+
+\begin{flushright}
+\rule{16cm}{5pt}\vskip1cm
+\begin{bfseries}
+\Huge{SOFTWARE REQUIREMENTS\\ SPECIFICATION}\\
+\vspace{1.5cm}
+for\\
+\vspace{1.5cm}
+THINKCRAFT LAB\\
+3D Printing E-commerce \& Events Platform\\
+\vspace{1.5cm}
+\LARGE{Version \myversion}\\
+\vspace{1.5cm}
+Prepared by : ThinkCraft Lab Development Team\\
+\vspace{1.5cm}
+\today\\
+\end{bfseries}
+\end{flushright}
+
+\tableofcontents
+
+
+\chapter{Introduction}
+
+\section{Purpose}
+ThinkCraft Lab is a comprehensive web-based platform that combines e-commerce functionality for 3D printing products and services with an integrated events management system for students and makers. The platform addresses the growing need for accessible 3D printing solutions while fostering a community through workshops, competitions, and educational courses.
+
+The main objectives of ThinkCraft Lab are:
+\begin{itemize}
+\item Provide an online marketplace for 3D printed products and design services
+\item Enable seamless order management and tracking
+\item Facilitate event creation and registration for educational activities
+\item Support student engagement through workshops and competitions
+\item Maintain comprehensive user profiles with order history and event participation
+\end{itemize}
+
+\section{Intended Audience and Reading Suggestions}
+This Software Requirements Specification (SRS) document is intended for:
+\begin{itemize}
+\item \textbf{Developers}: Full-stack developers working with React, Node.js, Express, and MongoDB
+\item \textbf{Project Managers}: For understanding scope, features, and timeline
+\item \textbf{Quality Assurance Team}: For creating test cases and validation criteria
+\item \textbf{Stakeholders}: Business owners and investors
+\item \textbf{End Users}: Customers, students, and administrators
+\end{itemize}
+
+The document is organized as follows:
+\begin{itemize}
+\item Chapter 1: Introduction and project overview
+\item Chapter 2: Overall system description and user classes
+\item Chapter 3: Detailed system features and requirements
+\item Chapter 4: Non-functional requirements
+\item Chapter 5: Additional requirements and constraints
+\end{itemize}
+
+\section{Project Scope}
+ThinkCraft Lab creates an integrated ecosystem for 3D printing enthusiasts, students, and professionals. The platform consists of two major components:
+
+\subsection{E-commerce Platform}
+\begin{itemize}
+\item Product catalog with 50+ 3D printed items across multiple categories
+\item Shopping cart with size selection and quantity management
+\item Wishlist functionality for saving favorite products
+\item Secure checkout process with multiple payment options
+\item Order tracking and history
+\item Coupon and discount system
+\item User profile management
+\end{itemize}
+
+\subsection{Events Management System}
+\begin{itemize}
+\item Event creation for workshops, competitions, and courses
+\item Event registration and attendance tracking
+\item Live event indicators
+\item Category-based event filtering
+\item Event creator dashboard
+\item Registration management
+\end{itemize}
+
+\subsection{User Roles}
+The platform supports four distinct user roles:
+\begin{itemize}
+\item \textbf{Customers}: Browse products, make purchases, register for events
+\item \textbf{Students}: Access educational content, participate in events
+\item \textbf{Event Creators}: Create and manage workshops and competitions
+\item \textbf{Administrators}: Manage users, events, and platform content
+\end{itemize}
+
+
+\chapter{Overall Description}
+
+\section{Product Perspective}
+ThinkCraft Lab is a standalone web application that operates independently while integrating with external services for payment processing and cloud storage. The system architecture follows a modern client-server model:
+
+\begin{itemize}
+\item \textbf{Frontend}: React-based single-page application (SPA)
+\item \textbf{Backend}: Node.js with Express.js REST API
+\item \textbf{Database}: MongoDB for data persistence
+\item \textbf{Deployment}: Vercel (frontend) and Render (backend)
+\end{itemize}
+
+The platform replaces traditional manual processes for:
+\begin{itemize}
+\item Product ordering and inventory management
+\item Event registration and attendance tracking
+\item Customer relationship management
+\item Order fulfillment and tracking
+\end{itemize}
+
+\section{Product Functions}
+The primary functions of ThinkCraft Lab include:
+
+\subsection{E-commerce Functions}
+\begin{enumerate}
+\item \textbf{Product Management}
+\begin{itemize}
+\item Browse 50+ products across 3 categories (3D Printing, Design Services, Prototyping)
+\item View detailed product information with images
+\item Filter and search products by category
+\item Pagination for efficient browsing
+\end{itemize}
+
+\item \textbf{Shopping Experience}
+\begin{itemize}
+\item Add products to cart with size and quantity selection
+\item Save products to wishlist
+\item Apply discount coupons (FIRST10, SAVE15, MEGA25)
+\item Real-time cart total calculation
+\item Secure checkout process
+\end{itemize}
+
+\item \textbf{Order Management}
+\begin{itemize}
+\item Generate unique order numbers
+\item Track order status (pending, processing, shipped, delivered)
+\item View order history in user profile
+\item Order confirmation with detailed receipt
+\end{itemize}
+\end{enumerate}
+
+\subsection{Events Management Functions}
+\begin{enumerate}
+\item \textbf{Event Creation}
+\begin{itemize}
+\item Create events with title, description, and category
+\item Upload event images
+\item Set date, time, and location
+\item Mark events as live
+\end{itemize}
+
+\item \textbf{Event Discovery}
+\begin{itemize}
+\item Browse all events with filtering by category
+\item View live events separately
+\item See event details including registrations count
+\item Related events suggestions
+\end{itemize}
+
+\item \textbf{Registration System}
+\begin{itemize}
+\item Register for events with one click
+\item Unregister from events
+\item View registration history
+\item Track attendance
+\end{itemize}
+\end{enumerate}
+
+\subsection{User Management Functions}
+\begin{enumerate}
+\item \textbf{Authentication}
+\begin{itemize}
+\item User registration with email verification
+\item Secure login with session management
+\item Password encryption using bcrypt
+\item Role-based access control
+\end{itemize}
+
+\item \textbf{Profile Management}
+\begin{itemize}
+\item Update personal information
+\item Change password
+\item View order history
+\item Manage event registrations
+\end{itemize}
+\end{enumerate}
+
+\section{User Classes and Characteristics}
+
+\subsection{Guest Users}
+\begin{itemize}
+\item Can browse products and events
+\item View product details
+\item Access public pages (Home, About, Work)
+\item Must register to make purchases or register for events
+\end{itemize}
+
+\subsection{Registered Customers}
+\begin{itemize}
+\item All guest user capabilities
+\item Add products to cart and wishlist
+\item Complete purchases
+\item Track orders
+\item Register for events
+\item Manage profile and settings
+\end{itemize}
+
+\subsection{Event Creators}
+\begin{itemize}
+\item All registered customer capabilities
+\item Create and manage events
+\item View event registrations
+\item Edit event details
+\item Delete own events
+\end{itemize}
+
+\subsection{Administrators}
+\begin{itemize}
+\item All system capabilities
+\item View platform statistics
+\item Manage all users
+\item Manage all events
+\item Delete any content
+\item Access admin dashboard
+\end{itemize}
+
+
+\section{Operating Environment}
+ThinkCraft Lab is designed to operate in the following environments:
+
+\subsection{Client-Side Requirements}
+\begin{itemize}
+\item \textbf{Web Browsers}: Chrome 90+, Firefox 88+, Safari 14+, Edge 90+
+\item \textbf{Operating Systems}: Windows 10+, macOS 10.15+, Linux (Ubuntu 20.04+)
+\item \textbf{Screen Resolution}: Minimum 320px width (mobile-first responsive design)
+\item \textbf{Internet Connection}: Broadband connection recommended
+\end{itemize}
+
+\subsection{Server-Side Requirements}
+\begin{itemize}
+\item \textbf{Runtime}: Node.js 18.x or higher
+\item \textbf{Database}: MongoDB 5.0 or higher
+\item \textbf{Memory}: Minimum 512MB RAM
+\item \textbf{Storage}: Minimum 1GB available space
+\end{itemize}
+
+\subsection{Deployment Environment}
+\begin{itemize}
+\item \textbf{Frontend Hosting}: Vercel (CDN-enabled)
+\item \textbf{Backend Hosting}: Render (containerized deployment)
+\item \textbf{Database Hosting}: MongoDB Atlas (cloud database)
+\item \textbf{SSL/TLS}: HTTPS encryption for all communications
+\end{itemize}
+
+\section{Design and Implementation Constraints}
+
+\subsection{Technology Stack Constraints}
+\begin{itemize}
+\item Must use React 18+ for frontend development
+\item Backend must be built with Node.js and Express.js
+\item MongoDB must be used for data persistence
+\item TypeScript must be used for type safety
+\end{itemize}
+
+\subsection{Security Constraints}
+\begin{itemize}
+\item All passwords must be hashed using bcrypt
+\item Session-based authentication required
+\item HTTPS must be enforced in production
+\item CORS policies must be properly configured
+\end{itemize}
+
+\subsection{Performance Constraints}
+\begin{itemize}
+\item Page load time must be under 3 seconds
+\item API response time must be under 500ms
+\item Support for 100+ concurrent users
+\item Database queries must be optimized with indexes
+\end{itemize}
+
+\subsection{Regulatory Constraints}
+\begin{itemize}
+\item Must comply with GDPR for user data protection
+\item Payment processing must follow PCI DSS standards
+\item User consent required for data collection
+\end{itemize}
+
+\section{Assumptions and Dependencies}
+
+\subsection{Assumptions}
+\begin{itemize}
+\item Users have basic computer literacy
+\item Users have access to modern web browsers
+\item Internet connectivity is available
+\item Payment gateway services are operational
+\end{itemize}
+
+\subsection{Dependencies}
+\begin{itemize}
+\item MongoDB Atlas availability
+\item Vercel and Render platform uptime
+\item Third-party npm packages maintenance
+\item Browser compatibility with modern JavaScript
+\end{itemize}
+
+
+\chapter{System Features}
+
+\section{User Authentication and Authorization}
+
+\subsection{Description and Priority}
+\textbf{Priority}: High
+
+User authentication is critical for securing the platform and providing personalized experiences. This feature enables users to create accounts, log in securely, and access role-specific functionality.
+
+\subsection{Functional Requirements}
+
+\subsubsection{User Registration}
+\begin{itemize}
+\item REQ-1.1: System shall allow users to register with username, email, and password
+\item REQ-1.2: System shall validate email format and username uniqueness
+\item REQ-1.3: System shall enforce minimum password length of 6 characters
+\item REQ-1.4: System shall hash passwords using bcrypt before storage
+\item REQ-1.5: System shall create user profile upon successful registration
+\end{itemize}
+
+\subsubsection{User Login}
+\begin{itemize}
+\item REQ-1.6: System shall authenticate users with username and password
+\item REQ-1.7: System shall create secure session upon successful login
+\item REQ-1.8: System shall redirect admin users to admin dashboard
+\item REQ-1.9: System shall display appropriate error messages for invalid credentials
+\item REQ-1.10: System shall maintain session for 7 days
+\end{itemize}
+
+\subsubsection{User Logout}
+\begin{itemize}
+\item REQ-1.11: System shall provide logout functionality
+\item REQ-1.12: System shall destroy user session on logout
+\item REQ-1.13: System shall redirect to home page after logout
+\end{itemize}
+
+\section{Product Catalog and Shopping}
+
+\subsection{Description and Priority}
+\textbf{Priority}: High
+
+The product catalog is the core of the e-commerce functionality, allowing users to browse, search, and purchase 3D printing products and services.
+
+\subsection{Functional Requirements}
+
+\subsubsection{Product Browsing}
+\begin{itemize}
+\item REQ-2.1: System shall display 50+ products in catalog
+\item REQ-2.2: System shall categorize products (3D Printing, Design Services, Prototyping)
+\item REQ-2.3: System shall implement pagination with 9 products per page
+\item REQ-2.4: System shall allow filtering by category
+\item REQ-2.5: System shall display product image, name, price, and description
+\end{itemize}
+
+\subsubsection{Product Details}
+\begin{itemize}
+\item REQ-2.6: System shall show detailed product information
+\item REQ-2.7: System shall display size options (Small, Medium, Large, X-Large)
+\item REQ-2.8: System shall allow quantity selection
+\item REQ-2.9: System shall show related products
+\item REQ-2.10: System shall display product specifications
+\end{itemize}
+
+\subsubsection{Shopping Cart}
+\begin{itemize}
+\item REQ-2.11: System shall allow adding products to cart with size selection
+\item REQ-2.12: System shall persist cart data in localStorage
+\item REQ-2.13: System shall allow quantity updates in cart
+\item REQ-2.14: System shall allow removing items from cart
+\item REQ-2.15: System shall calculate and display cart total
+\item REQ-2.16: System shall maintain separate carts for different users
+\end{itemize}
+
+\subsubsection{Wishlist}
+\begin{itemize}
+\item REQ-2.17: System shall allow adding products to wishlist
+\item REQ-2.18: System shall prevent duplicate wishlist entries
+\item REQ-2.19: System shall allow removing items from wishlist
+\item REQ-2.20: System shall allow moving items from wishlist to cart
+\end{itemize}
+
+\section{Checkout and Order Management}
+
+\subsection{Description and Priority}
+\textbf{Priority}: High
+
+The checkout process enables users to complete purchases and track their orders.
+
+\subsection{Functional Requirements}
+
+\subsubsection{Checkout Process}
+\begin{itemize}
+\item REQ-3.1: System shall require user authentication for checkout
+\item REQ-3.2: System shall collect shipping address information
+\item REQ-3.3: System shall support multiple payment methods (Credit Card, PayPal, Cash on Delivery)
+\item REQ-3.4: System shall allow coupon code application
+\item REQ-3.5: System shall validate coupon codes (FIRST10, SAVE15, MEGA25, TEST10)
+\item REQ-3.6: System shall calculate discount based on coupon type
+\item REQ-3.7: System shall display order summary with subtotal, discount, and total
+\end{itemize}
+
+\subsubsection{Order Creation}
+\begin{itemize}
+\item REQ-3.8: System shall generate unique order numbers
+\item REQ-3.9: System shall store order details in database
+\item REQ-3.10: System shall associate orders with user accounts
+\item REQ-3.11: System shall clear cart after successful order
+\item REQ-3.12: System shall redirect to order confirmation page
+\end{itemize}
+
+\subsubsection{Order Tracking}
+\begin{itemize}
+\item REQ-3.13: System shall display order history in user profile
+\item REQ-3.14: System shall show order status (pending, processing, shipped, delivered)
+\item REQ-3.15: System shall allow viewing order details
+\item REQ-3.16: System shall display order items with quantities and prices
+\end{itemize}
+
+
+\section{Events Management System}
+
+\subsection{Description and Priority}
+\textbf{Priority}: High
+
+The events system enables community engagement through workshops, competitions, and courses.
+
+\subsection{Functional Requirements}
+
+\subsubsection{Event Creation}
+\begin{itemize}
+\item REQ-4.1: System shall allow authenticated users to create events
+\item REQ-4.2: System shall require event title, description, category, date, and location
+\item REQ-4.3: System shall support event categories (Workshop, Competition, Course, Other)
+\item REQ-4.4: System shall allow uploading event images
+\item REQ-4.5: System shall allow marking events as live
+\item REQ-4.6: System shall associate events with creator user ID
+\end{itemize}
+
+\subsubsection{Event Discovery}
+\begin{itemize}
+\item REQ-4.7: System shall display all events in chronological order
+\item REQ-4.8: System shall allow filtering events by category
+\item REQ-4.9: System shall show live events separately
+\item REQ-4.10: System shall display event details (title, description, date, location, registrations)
+\item REQ-4.11: System shall show event creator information
+\end{itemize}
+
+\subsubsection{Event Registration}
+\begin{itemize}
+\item REQ-4.12: System shall allow authenticated users to register for events
+\item REQ-4.13: System shall prevent duplicate registrations
+\item REQ-4.14: System shall allow users to unregister from events
+\item REQ-4.15: System shall track registration count for each event
+\item REQ-4.16: System shall display registration status to users
+\end{itemize}
+
+\subsubsection{Event Management}
+\begin{itemize}
+\item REQ-4.17: System shall allow event creators to edit their events
+\item REQ-4.18: System shall allow event creators to delete their events
+\item REQ-4.19: System shall allow viewing event registrations
+\item REQ-4.20: System shall display registrant usernames and registration dates
+\end{itemize}
+
+\section{User Profile and Settings}
+
+\subsection{Description and Priority}
+\textbf{Priority}: Medium
+
+User profiles provide personalized experiences and account management capabilities.
+
+\subsection{Functional Requirements}
+
+\subsubsection{Profile Management}
+\begin{itemize}
+\item REQ-5.1: System shall display user profile with personal information
+\item REQ-5.2: System shall show order history with order numbers and totals
+\item REQ-5.3: System shall display event registrations
+\item REQ-5.4: System shall show account creation date
+\item REQ-5.5: System shall indicate admin status if applicable
+\end{itemize}
+
+\subsubsection{Settings Management}
+\begin{itemize}
+\item REQ-5.6: System shall allow updating username and email
+\item REQ-5.7: System shall validate username and email uniqueness
+\item REQ-5.8: System shall allow password changes
+\item REQ-5.9: System shall require current password for password changes
+\item REQ-5.10: System shall enforce minimum password length
+\item REQ-5.11: System shall provide notification preferences
+\item REQ-5.12: System shall include FAQ section
+\end{itemize}
+
+\section{Administrative Functions}
+
+\subsection{Description and Priority}
+\textbf{Priority}: High
+
+Administrative functions enable platform management and monitoring.
+
+\subsection{Functional Requirements}
+
+\subsubsection{Admin Dashboard}
+\begin{itemize}
+\item REQ-6.1: System shall restrict admin dashboard to admin users only
+\item REQ-6.2: System shall display total users count
+\item REQ-6.3: System shall display total events count
+\item REQ-6.4: System shall display total registrations count
+\item REQ-6.5: System shall display live events count
+\end{itemize}
+
+\subsubsection{Event Management}
+\begin{itemize}
+\item REQ-6.6: System shall display all events in admin dashboard
+\item REQ-6.7: System shall allow admins to view event registrations
+\item REQ-6.8: System shall allow admins to delete any event
+\item REQ-6.9: System shall show event creator information
+\item REQ-6.10: System shall display event status (live/scheduled)
+\end{itemize}
+
+\subsubsection{User Management}
+\begin{itemize}
+\item REQ-6.11: System shall allow creating admin users via script
+\item REQ-6.12: System shall support role-based access control
+\item REQ-6.13: System shall track user activity
+\end{itemize}
+
+
+\section{Content Pages}
+
+\subsection{Description and Priority}
+\textbf{Priority}: Medium
+
+Content pages provide information about the company and showcase work.
+
+\subsection{Functional Requirements}
+
+\subsubsection{Home Page}
+\begin{itemize}
+\item REQ-7.1: System shall display hero section with animated text
+\item REQ-7.2: System shall include sticky video section
+\item REQ-7.3: System shall implement smooth scroll animations
+\item REQ-7.4: System shall show company overview
+\end{itemize}
+
+\subsubsection{About Page}
+\begin{itemize}
+\item REQ-7.5: System shall display company vision and mission
+\item REQ-7.6: System shall show technical expertise
+\item REQ-7.7: System shall highlight 3D printing technologies (FDM, SLA, SLS)
+\item REQ-7.8: System shall include company history and achievements
+\end{itemize}
+
+\subsubsection{Work Portfolio}
+\begin{itemize}
+\item REQ-7.9: System shall showcase completed projects
+\item REQ-7.10: System shall include 3D model viewer for STL files
+\item REQ-7.11: System shall explain 3D printing process
+\item REQ-7.12: System shall display project statistics
+\end{itemize}
+
+\chapter{External Interface Requirements}
+
+\section{User Interfaces}
+
+\subsection{General UI Requirements}
+\begin{itemize}
+\item UI-1: Interface shall be responsive for mobile, tablet, and desktop
+\item UI-2: Interface shall follow modern design principles
+\item UI-3: Interface shall use consistent color scheme (primary: \#ff6a00)
+\item UI-4: Interface shall include navigation bar on all pages
+\item UI-5: Interface shall include footer with contact information
+\end{itemize}
+
+\subsection{Navigation}
+\begin{itemize}
+\item UI-6: Navigation shall include links to Home, Shop, Work, About, Students, Contact
+\item UI-7: Navigation shall show cart and wishlist item counts
+\item UI-8: Navigation shall display user profile icon when logged in
+\item UI-9: Navigation shall include mobile hamburger menu
+\item UI-10: Navigation shall be sticky on scroll
+\end{itemize}
+
+\subsection{Forms}
+\begin{itemize}
+\item UI-11: All forms shall include input validation
+\item UI-12: Forms shall display error messages clearly
+\item UI-13: Forms shall show loading states during submission
+\item UI-14: Forms shall provide success feedback
+\end{itemize}
+
+\section{Hardware Interfaces}
+The system does not directly interface with hardware. However, it requires:
+\begin{itemize}
+\item Standard input devices (keyboard, mouse, touchscreen)
+\item Display devices with minimum 320px width
+\item Network interface for internet connectivity
+\end{itemize}
+
+\section{Software Interfaces}
+
+\subsection{Frontend Technologies}
+\begin{itemize}
+\item \textbf{React 18.3.1}: UI component library
+\item \textbf{TypeScript 5.6.3}: Type-safe JavaScript
+\item \textbf{Vite 5.4.20}: Build tool and dev server
+\item \textbf{Tailwind CSS 3.4.17}: Utility-first CSS framework
+\item \textbf{Framer Motion 11.13.1}: Animation library
+\item \textbf{GSAP 3.13.0}: Advanced animations
+\item \textbf{Wouter 3.3.5}: Lightweight routing
+\item \textbf{TanStack Query 5.60.5}: Data fetching and caching
+\end{itemize}
+
+\subsection{Backend Technologies}
+\begin{itemize}
+\item \textbf{Node.js 18+}: JavaScript runtime
+\item \textbf{Express 4.21.2}: Web application framework
+\item \textbf{MongoDB 5.0+}: NoSQL database
+\item \textbf{Mongoose 9.1.3}: MongoDB object modeling
+\item \textbf{bcryptjs 3.0.3}: Password hashing
+\item \textbf{express-session 1.18.1}: Session management
+\end{itemize}
+
+\subsection{External Services}
+\begin{itemize}
+\item \textbf{MongoDB Atlas}: Cloud database hosting
+\item \textbf{Vercel}: Frontend hosting and CDN
+\item \textbf{Render}: Backend hosting
+\end{itemize}
+
+\section{Communication Interfaces}
+
+\subsection{HTTP/HTTPS Protocol}
+\begin{itemize}
+\item All client-server communication shall use HTTPS in production
+\item RESTful API architecture shall be followed
+\item JSON format shall be used for data exchange
+\end{itemize}
+
+\subsection{API Endpoints}
+\begin{itemize}
+\item \textbf{Authentication}: /api/auth/signup, /api/auth/login, /api/auth/logout, /api/auth/me
+\item \textbf{Orders}: /api/orders (GET, POST), /api/orders/:orderId (GET)
+\item \textbf{Events}: /api/events (GET, POST), /api/events/:eventId (GET, PUT, DELETE)
+\item \textbf{Registration}: /api/events/:eventId/register (POST, DELETE)
+\item \textbf{User}: /api/user/profile (PUT), /api/user/password (PUT)
+\item \textbf{Admin}: /api/admin/stats (GET)
+\end{itemize}
+
+
+\chapter{Non-Functional Requirements}
+
+\section{Performance Requirements}
+
+\subsection{Response Time}
+\begin{itemize}
+\item PERF-1: Page load time shall not exceed 3 seconds on broadband connection
+\item PERF-2: API response time shall not exceed 500ms for 95\% of requests
+\item PERF-3: Database queries shall be optimized with appropriate indexes
+\item PERF-4: Images shall be optimized and lazy-loaded
+\end{itemize}
+
+\subsection{Throughput}
+\begin{itemize}
+\item PERF-5: System shall support 100+ concurrent users
+\item PERF-6: System shall handle 1000+ requests per minute
+\item PERF-7: Database shall support 500+ simultaneous connections
+\end{itemize}
+
+\subsection{Resource Utilization}
+\begin{itemize}
+\item PERF-8: Frontend bundle size shall not exceed 2MB
+\item PERF-9: Backend memory usage shall not exceed 512MB under normal load
+\item PERF-10: Database storage shall be efficiently managed
+\end{itemize}
+
+\section{Security Requirements}
+
+\subsection{Authentication and Authorization}
+\begin{itemize}
+\item SEC-1: All passwords shall be hashed using bcrypt with salt rounds of 10
+\item SEC-2: Session tokens shall be securely generated and stored
+\item SEC-3: Session timeout shall be 7 days of inactivity
+\item SEC-4: Role-based access control shall be enforced
+\item SEC-5: Admin functions shall be restricted to admin users only
+\end{itemize}
+
+\subsection{Data Protection}
+\begin{itemize}
+\item SEC-6: All data transmission shall use HTTPS encryption
+\item SEC-7: Sensitive data shall not be logged
+\item SEC-8: Database connections shall use authentication
+\item SEC-9: Environment variables shall be used for sensitive configuration
+\item SEC-10: CORS policies shall be properly configured
+\end{itemize}
+
+\subsection{Input Validation}
+\begin{itemize}
+\item SEC-11: All user inputs shall be validated on both client and server
+\item SEC-12: SQL injection prevention through parameterized queries
+\item SEC-13: XSS prevention through input sanitization
+\item SEC-14: CSRF protection through session tokens
+\end{itemize}
+
+\section{Reliability Requirements}
+
+\subsection{Availability}
+\begin{itemize}
+\item REL-1: System shall maintain 99\% uptime
+\item REL-2: Scheduled maintenance shall be announced 24 hours in advance
+\item REL-3: System shall gracefully handle service interruptions
+\end{itemize}
+
+\subsection{Error Handling}
+\begin{itemize}
+\item REL-4: System shall display user-friendly error messages
+\item REL-5: System shall log errors for debugging
+\item REL-6: System shall recover from transient failures
+\item REL-7: Database transactions shall be atomic
+\end{itemize}
+
+\subsection{Data Integrity}
+\begin{itemize}
+\item REL-8: Database shall enforce referential integrity
+\item REL-9: Order data shall be consistent across all operations
+\item REL-10: User data shall not be corrupted during updates
+\end{itemize}
+
+\section{Usability Requirements}
+
+\subsection{Ease of Use}
+\begin{itemize}
+\item USE-1: New users shall be able to register within 2 minutes
+\item USE-2: Users shall be able to complete a purchase within 5 minutes
+\item USE-3: Navigation shall be intuitive and consistent
+\item USE-4: Help text shall be provided for complex operations
+\end{itemize}
+
+\subsection{Accessibility}
+\begin{itemize}
+\item USE-5: Interface shall be keyboard navigable
+\item USE-6: Color contrast shall meet WCAG 2.1 AA standards
+\item USE-7: Images shall include alt text
+\item USE-8: Forms shall include proper labels
+\end{itemize}
+
+\subsection{Responsiveness}
+\begin{itemize}
+\item USE-9: Interface shall adapt to screen sizes from 320px to 2560px
+\item USE-10: Touch targets shall be minimum 44x44 pixels on mobile
+\item USE-11: Text shall be readable without zooming
+\item USE-12: Mobile menu shall be easily accessible
+\end{itemize}
+
+\section{Maintainability Requirements}
+
+\subsection{Code Quality}
+\begin{itemize}
+\item MAINT-1: Code shall follow TypeScript best practices
+\item MAINT-2: Functions shall be modular and reusable
+\item MAINT-3: Code shall include inline comments for complex logic
+\item MAINT-4: Naming conventions shall be consistent
+\end{itemize}
+
+\subsection{Documentation}
+\begin{itemize}
+\item MAINT-5: API endpoints shall be documented
+\item MAINT-6: Database schema shall be documented
+\item MAINT-7: Deployment process shall be documented
+\item MAINT-8: README files shall be maintained
+\end{itemize}
+
+\subsection{Testing}
+\begin{itemize}
+\item MAINT-9: Critical functions shall have unit tests
+\item MAINT-10: API endpoints shall have integration tests
+\item MAINT-11: UI components shall be tested
+\item MAINT-12: Test coverage shall be monitored
+\end{itemize}
+
+\section{Scalability Requirements}
+
+\subsection{Horizontal Scaling}
+\begin{itemize}
+\item SCALE-1: Backend shall support multiple instances
+\item SCALE-2: Database shall support sharding if needed
+\item SCALE-3: Static assets shall be served via CDN
+\end{itemize}
+
+\subsection{Vertical Scaling}
+\begin{itemize}
+\item SCALE-4: System shall efficiently use available resources
+\item SCALE-5: Memory leaks shall be prevented
+\item SCALE-6: Database queries shall be optimized
+\end{itemize}
+
+
+\chapter{Database Design}
+
+\section{Database Schema}
+
+\subsection{Users Collection}
+\begin{lstlisting}[language=JavaScript]
+{
+  _id: ObjectId,
+  username: String (unique, required),
+  email: String (unique, required),
+  password: String (hashed, required),
+  isAdmin: Boolean (default: false),
+  createdAt: Date (default: now)
+}
+\end{lstlisting}
+
+\subsection{Orders Collection}
+\begin{lstlisting}[language=JavaScript]
+{
+  _id: ObjectId,
+  userId: String (indexed, required),
+  orderNumber: String (unique, required),
+  status: String (default: 'pending'),
+  subtotal: Number (required),
+  discount: Number (default: 0),
+  couponCode: String (optional),
+  totalAmount: Number (required),
+  shippingAddress: String (required),
+  shippingCity: String (required),
+  shippingState: String (required),
+  shippingZip: String (required),
+  shippingCountry: String (default: 'USA'),
+  paymentMethod: String (required),
+  items: [
+    {
+      productId: Number,
+      productName: String,
+      productPrice: Number,
+      productImage: String,
+      size: String,
+      quantity: Number
+    }
+  ],
+  createdAt: Date (default: now)
+}
+\end{lstlisting}
+
+\subsection{Events Collection}
+\begin{lstlisting}[language=JavaScript]
+{
+  _id: ObjectId,
+  title: String (required),
+  description: String (required),
+  category: String (enum: workshop, competition, 
+                    course, other),
+  images: [String],
+  date: Date (required),
+  location: String (required),
+  isLive: Boolean (default: false),
+  createdBy: ObjectId (ref: User),
+  createdByUsername: String (required),
+  registrations: [
+    {
+      userId: ObjectId (ref: User),
+      username: String,
+      registeredAt: Date (default: now)
+    }
+  ],
+  createdAt: Date,
+  updatedAt: Date
+}
+\end{lstlisting}
+
+\section{Data Relationships}
+
+\subsection{User-Order Relationship}
+\begin{itemize}
+\item One user can have multiple orders (One-to-Many)
+\item Orders reference users via userId field
+\item Cascade delete: When user is deleted, their orders remain for record-keeping
+\end{itemize}
+
+\subsection{User-Event Relationship}
+\begin{itemize}
+\item One user can create multiple events (One-to-Many)
+\item One user can register for multiple events (Many-to-Many)
+\item Events reference creator via createdBy field
+\item Registrations are embedded in events document
+\end{itemize}
+
+\section{Indexing Strategy}
+
+\subsection{Users Collection Indexes}
+\begin{itemize}
+\item username: Unique index for fast lookup
+\item email: Unique index for authentication
+\end{itemize}
+
+\subsection{Orders Collection Indexes}
+\begin{itemize}
+\item userId: Index for user order history queries
+\item orderNumber: Unique index for order lookup
+\item createdAt: Index for sorting by date
+\end{itemize}
+
+\subsection{Events Collection Indexes}
+\begin{itemize}
+\item category: Index for category filtering
+\item isLive: Index for live events queries
+\item date: Index for chronological sorting
+\item createdBy: Index for creator's events
+\end{itemize}
+
+\chapter{System Architecture}
+
+\section{Architecture Overview}
+ThinkCraft Lab follows a three-tier architecture:
+
+\subsection{Presentation Layer (Frontend)}
+\begin{itemize}
+\item React-based single-page application
+\item Responsive UI with Tailwind CSS
+\item Client-side routing with Wouter
+\item State management with React Context and TanStack Query
+\item Animations with Framer Motion and GSAP
+\end{itemize}
+
+\subsection{Application Layer (Backend)}
+\begin{itemize}
+\item Express.js REST API
+\item Session-based authentication
+\item Business logic implementation
+\item Data validation and sanitization
+\item Error handling and logging
+\end{itemize}
+
+\subsection{Data Layer (Database)}
+\begin{itemize}
+\item MongoDB for data persistence
+\item Mongoose for object modeling
+\item Indexed collections for performance
+\item Data validation at schema level
+\end{itemize}
+
+\section{Component Architecture}
+
+\subsection{Frontend Components}
+\begin{itemize}
+\item \textbf{Pages}: Home, Shop, Work, About, Students, Profile, Admin
+\item \textbf{Layouts}: Navigation, Footer
+\item \textbf{Features}: Cart, Wishlist, Checkout, Events
+\item \textbf{UI Components}: Buttons, Forms, Cards, Modals
+\item \textbf{Contexts}: AuthContext, ShopContext
+\end{itemize}
+
+\subsection{Backend Modules}
+\begin{itemize}
+\item \textbf{Routes}: Authentication, Orders, Events, Users, Admin
+\item \textbf{Models}: User, Order, Event
+\item \textbf{Storage}: Database operations abstraction
+\item \textbf{Middleware}: Authentication, Error handling, CORS
+\end{itemize}
+
+\section{Deployment Architecture}
+
+\subsection{Production Environment}
+\begin{itemize}
+\item \textbf{Frontend}: Deployed on Vercel with CDN
+\item \textbf{Backend}: Deployed on Render with auto-scaling
+\item \textbf{Database}: MongoDB Atlas with replica sets
+\item \textbf{SSL/TLS}: Automatic HTTPS encryption
+\end{itemize}
+
+\subsection{Development Environment}
+\begin{itemize}
+\item Local development server with hot reload
+\item Local MongoDB instance or Atlas connection
+\item Environment variables for configuration
+\item Development tools: TypeScript, ESLint, Prettier
+\end{itemize}
+
+
+\chapter{Testing Requirements}
+
+\section{Testing Strategy}
+
+\subsection{Unit Testing}
+\begin{itemize}
+\item Test individual functions and components
+\item Mock external dependencies
+\item Achieve minimum 70\% code coverage
+\item Test edge cases and error conditions
+\end{itemize}
+
+\subsection{Integration Testing}
+\begin{itemize}
+\item Test API endpoints with actual database
+\item Verify data flow between components
+\item Test authentication and authorization
+\item Validate database operations
+\end{itemize}
+
+\subsection{End-to-End Testing}
+\begin{itemize}
+\item Test complete user workflows
+\item Verify shopping cart to checkout process
+\item Test event creation and registration
+\item Validate user authentication flow
+\end{itemize}
+
+\section{Test Cases}
+
+\subsection{Authentication Test Cases}
+\begin{enumerate}
+\item \textbf{TC-AUTH-001}: User registration with valid data
+\item \textbf{TC-AUTH-002}: User registration with duplicate username
+\item \textbf{TC-AUTH-003}: User login with valid credentials
+\item \textbf{TC-AUTH-004}: User login with invalid credentials
+\item \textbf{TC-AUTH-005}: Session persistence across page reloads
+\item \textbf{TC-AUTH-006}: User logout functionality
+\item \textbf{TC-AUTH-007}: Password change with correct current password
+\item \textbf{TC-AUTH-008}: Password change with incorrect current password
+\end{enumerate}
+
+\subsection{E-commerce Test Cases}
+\begin{enumerate}
+\item \textbf{TC-SHOP-001}: Browse products with pagination
+\item \textbf{TC-SHOP-002}: Filter products by category
+\item \textbf{TC-SHOP-003}: Add product to cart with size selection
+\item \textbf{TC-SHOP-004}: Update cart item quantity
+\item \textbf{TC-SHOP-005}: Remove item from cart
+\item \textbf{TC-SHOP-006}: Add product to wishlist
+\item \textbf{TC-SHOP-007}: Move item from wishlist to cart
+\item \textbf{TC-SHOP-008}: Apply valid coupon code
+\item \textbf{TC-SHOP-009}: Apply invalid coupon code
+\item \textbf{TC-SHOP-010}: Complete checkout process
+\item \textbf{TC-SHOP-011}: View order history
+\item \textbf{TC-SHOP-012}: View order details
+\end{enumerate}
+
+\subsection{Events Test Cases}
+\begin{enumerate}
+\item \textbf{TC-EVENT-001}: Create event with valid data
+\item \textbf{TC-EVENT-002}: Create event with missing required fields
+\item \textbf{TC-EVENT-003}: View all events
+\item \textbf{TC-EVENT-004}: Filter events by category
+\item \textbf{TC-EVENT-005}: Register for event
+\item \textbf{TC-EVENT-006}: Prevent duplicate registration
+\item \textbf{TC-EVENT-007}: Unregister from event
+\item \textbf{TC-EVENT-008}: Edit own event
+\item \textbf{TC-EVENT-009}: Delete own event
+\item \textbf{TC-EVENT-010}: View event registrations
+\end{enumerate}
+
+\subsection{Admin Test Cases}
+\begin{enumerate}
+\item \textbf{TC-ADMIN-001}: Access admin dashboard as admin
+\item \textbf{TC-ADMIN-002}: Deny admin access to non-admin users
+\item \textbf{TC-ADMIN-003}: View platform statistics
+\item \textbf{TC-ADMIN-004}: View all events
+\item \textbf{TC-ADMIN-005}: Delete any event
+\item \textbf{TC-ADMIN-006}: View event registrations
+\end{enumerate}
+
+\section{Performance Testing}
+
+\subsection{Load Testing}
+\begin{itemize}
+\item Simulate 100 concurrent users
+\item Measure response times under load
+\item Identify bottlenecks
+\item Test database query performance
+\end{itemize}
+
+\subsection{Stress Testing}
+\begin{itemize}
+\item Test system behavior at maximum capacity
+\item Identify breaking points
+\item Verify graceful degradation
+\item Test recovery mechanisms
+\end{itemize}
+
+\section{Security Testing}
+
+\subsection{Vulnerability Testing}
+\begin{itemize}
+\item Test for SQL injection vulnerabilities
+\item Test for XSS vulnerabilities
+\item Test for CSRF vulnerabilities
+\item Verify authentication bypass attempts fail
+\end{itemize}
+
+\subsection{Penetration Testing}
+\begin{itemize}
+\item Attempt unauthorized access to admin functions
+\item Test session hijacking prevention
+\item Verify password hashing security
+\item Test API endpoint security
+\end{itemize}
+
+\chapter{Deployment and Maintenance}
+
+\section{Deployment Process}
+
+\subsection{Frontend Deployment (Vercel)}
+\begin{enumerate}
+\item Push code to GitHub repository
+\item Connect repository to Vercel
+\item Configure build settings:
+\begin{itemize}
+\item Build Command: npm run build
+\item Output Directory: dist/public
+\item Framework: Vite
+\end{itemize}
+\item Set environment variables:
+\begin{itemize}
+\item VITE\_API\_URL: Backend URL
+\end{itemize}
+\item Deploy and verify
+\end{enumerate}
+
+\subsection{Backend Deployment (Render)}
+\begin{enumerate}
+\item Push code to GitHub repository
+\item Create new Web Service on Render
+\item Configure service settings:
+\begin{itemize}
+\item Build Command: npm install
+\item Start Command: npm start
+\item Environment: Node
+\end{itemize}
+\item Set environment variables:
+\begin{itemize}
+\item MONGODB\_URI: Database connection string
+\item SESSION\_SECRET: Random secret key
+\item NODE\_ENV: production
+\item FRONTEND\_URL: Vercel URL
+\end{itemize}
+\item Deploy and verify
+\end{enumerate}
+
+\subsection{Database Setup (MongoDB Atlas)}
+\begin{enumerate}
+\item Create MongoDB Atlas account
+\item Create new cluster (M0 Free tier)
+\item Configure network access (allow all IPs for Render)
+\item Create database user
+\item Get connection string
+\item Configure in backend environment variables
+\end{enumerate}
+
+\section{Maintenance Requirements}
+
+\subsection{Regular Maintenance}
+\begin{itemize}
+\item Monitor system performance and uptime
+\item Review error logs weekly
+\item Update dependencies monthly
+\item Backup database weekly
+\item Review security patches
+\end{itemize}
+
+\subsection{Database Maintenance}
+\begin{itemize}
+\item Monitor database size and performance
+\item Optimize slow queries
+\item Archive old orders (older than 2 years)
+\item Maintain indexes
+\item Regular backups with point-in-time recovery
+\end{itemize}
+
+\subsection{Code Maintenance}
+\begin{itemize}
+\item Refactor code for better maintainability
+\item Update documentation
+\item Remove deprecated features
+\item Optimize bundle size
+\item Update TypeScript types
+\end{itemize}
+
+\section{Monitoring and Logging}
+
+\subsection{Application Monitoring}
+\begin{itemize}
+\item Monitor API response times
+\item Track error rates
+\item Monitor user activity
+\item Track conversion rates
+\end{itemize}
+
+\subsection{Infrastructure Monitoring}
+\begin{itemize}
+\item Monitor server uptime
+\item Track resource utilization
+\item Monitor database performance
+\item Track CDN performance
+\end{itemize}
+
+\subsection{Logging Strategy}
+\begin{itemize}
+\item Log all API requests
+\item Log authentication events
+\item Log errors with stack traces
+\item Log database operations
+\item Implement log rotation
+\end{itemize}
+
+
+\chapter{Future Enhancements}
+
+\section{Planned Features}
+
+\subsection{Phase 2 Features}
+\begin{enumerate}
+\item \textbf{Payment Gateway Integration}
+\begin{itemize}
+\item Integrate Stripe for credit card payments
+\item Add PayPal payment option
+\item Implement payment webhooks
+\item Add payment history
+\end{itemize}
+
+\item \textbf{Advanced Search}
+\begin{itemize}
+\item Full-text search for products
+\item Search filters (price range, category, rating)
+\item Search suggestions and autocomplete
+\item Recent searches history
+\end{itemize}
+
+\item \textbf{Product Reviews and Ratings}
+\begin{itemize}
+\item Allow customers to rate products
+\item Write and read product reviews
+\item Display average ratings
+\item Review moderation system
+\end{itemize}
+
+\item \textbf{Email Notifications}
+\begin{itemize}
+\item Order confirmation emails
+\item Shipping updates
+\item Event registration confirmations
+\item Newsletter subscriptions
+\end{itemize}
+\end{enumerate}
+
+\subsection{Phase 3 Features}
+\begin{enumerate}
+\item \textbf{Real-time Chat Support}
+\begin{itemize}
+\item Live chat with customer support
+\item Chatbot for common queries
+\item Chat history
+\end{itemize}
+
+\item \textbf{Advanced Analytics}
+\begin{itemize}
+\item Sales analytics dashboard
+\item User behavior tracking
+\item Conversion funnel analysis
+\item Revenue reports
+\end{itemize}
+
+\item \textbf{Social Features}
+\begin{itemize}
+\item Share products on social media
+\item Social login (Google, Facebook)
+\item User profiles with activity feed
+\item Follow other users
+\end{itemize}
+
+\item \textbf{Mobile Application}
+\begin{itemize}
+\item Native iOS app
+\item Native Android app
+\item Push notifications
+\item Offline mode
+\end{itemize}
+\end{enumerate}
+
+\section{Technical Improvements}
+
+\subsection{Performance Optimization}
+\begin{itemize}
+\item Implement Redis caching
+\item Add service workers for offline support
+\item Optimize image delivery with WebP format
+\item Implement lazy loading for all images
+\item Add code splitting for better load times
+\end{itemize}
+
+\subsection{Security Enhancements}
+\begin{itemize}
+\item Implement two-factor authentication
+\item Add rate limiting for API endpoints
+\item Implement CAPTCHA for forms
+\item Add security headers
+\item Regular security audits
+\end{itemize}
+
+\subsection{Scalability Improvements}
+\begin{itemize}
+\item Implement microservices architecture
+\item Add load balancing
+\item Implement database sharding
+\item Add message queue for async operations
+\item Implement CDN for static assets
+\end{itemize}
+
+\chapter{Glossary}
+
+\begin{description}
+\item[3D Printing] Additive manufacturing process that creates three-dimensional objects from digital models
+\item[API] Application Programming Interface - set of protocols for building software applications
+\item[bcrypt] Password hashing function designed for secure password storage
+\item[CDN] Content Delivery Network - distributed network of servers for fast content delivery
+\item[CORS] Cross-Origin Resource Sharing - mechanism for allowing restricted resources on a web page
+\item[E-commerce] Electronic commerce - buying and selling of goods online
+\item[Express.js] Web application framework for Node.js
+\item[FDM] Fused Deposition Modeling - 3D printing technology
+\item[GDPR] General Data Protection Regulation - EU data protection law
+\item[HTTPS] Hypertext Transfer Protocol Secure - encrypted version of HTTP
+\item[JWT] JSON Web Token - compact token format for secure information transmission
+\item[MongoDB] NoSQL document-oriented database
+\item[Mongoose] MongoDB object modeling tool for Node.js
+\item[Node.js] JavaScript runtime built on Chrome's V8 engine
+\item[React] JavaScript library for building user interfaces
+\item[REST] Representational State Transfer - architectural style for web services
+\item[SLA] Stereolithography - 3D printing technology using photopolymerization
+\item[SLS] Selective Laser Sintering - 3D printing technology using laser
+\item[SPA] Single Page Application - web application that loads a single HTML page
+\item[SSL/TLS] Secure Sockets Layer/Transport Layer Security - cryptographic protocols
+\item[TypeScript] Typed superset of JavaScript
+\item[UI/UX] User Interface/User Experience
+\item[Vite] Next-generation frontend build tool
+\item[WCAG] Web Content Accessibility Guidelines
+\end{description}
+
+\chapter{Appendices}
+
+\section{Appendix A: API Documentation}
+
+\subsection{Authentication Endpoints}
+
+\subsubsection{POST /api/auth/signup}
+\textbf{Description}: Register a new user
+
+\textbf{Request Body}:
+\begin{lstlisting}[language=JavaScript]
+{
+  "username": "string",
+  "email": "string",
+  "password": "string"
+}
+\end{lstlisting}
+
+\textbf{Response}: User object with session
+
+\subsubsection{POST /api/auth/login}
+\textbf{Description}: Authenticate user
+
+\textbf{Request Body}:
+\begin{lstlisting}[language=JavaScript]
+{
+  "username": "string",
+  "password": "string"
+}
+\end{lstlisting}
+
+\textbf{Response}: User object with session
+
+\subsubsection{POST /api/auth/logout}
+\textbf{Description}: End user session
+
+\textbf{Response}: Success message
+
+\subsubsection{GET /api/auth/me}
+\textbf{Description}: Get current user information
+
+\textbf{Response}: User object
+
+\subsection{Order Endpoints}
+
+\subsubsection{POST /api/orders}
+\textbf{Description}: Create new order
+
+\textbf{Request Body}:
+\begin{lstlisting}[language=JavaScript]
+{
+  "shippingAddress": "string",
+  "shippingCity": "string",
+  "shippingState": "string",
+  "shippingZip": "string",
+  "shippingCountry": "string",
+  "paymentMethod": "string",
+  "couponCode": "string (optional)",
+  "cartItems": [
+    {
+      "id": "number",
+      "name": "string",
+      "price": "string",
+      "image": "string",
+      "size": "string",
+      "quantity": "number"
+    }
+  ]
+}
+\end{lstlisting}
+
+\textbf{Response}: Order object
+
+\subsubsection{GET /api/orders}
+\textbf{Description}: Get user's order history
+
+\textbf{Response}: Array of order objects
+
+\subsubsection{GET /api/orders/:orderId}
+\textbf{Description}: Get specific order details
+
+\textbf{Response}: Order object with items
+
+\subsection{Event Endpoints}
+
+\subsubsection{GET /api/events}
+\textbf{Description}: Get all events
+
+\textbf{Query Parameters}:
+\begin{itemize}
+\item category: Filter by category
+\item live: Filter live events (true/false)
+\end{itemize}
+
+\textbf{Response}: Array of event objects
+
+\subsubsection{POST /api/events}
+\textbf{Description}: Create new event
+
+\textbf{Request Body}:
+\begin{lstlisting}[language=JavaScript]
+{
+  "title": "string",
+  "description": "string",
+  "category": "workshop|competition|course|other",
+  "images": ["string"],
+  "date": "ISO date string",
+  "location": "string",
+  "isLive": "boolean"
+}
+\end{lstlisting}
+
+\textbf{Response}: Event object
+
+\subsubsection{GET /api/events/:eventId}
+\textbf{Description}: Get specific event details
+
+\textbf{Response}: Event object
+
+\subsubsection{PUT /api/events/:eventId}
+\textbf{Description}: Update event (creator only)
+
+\textbf{Request Body}: Partial event object
+
+\textbf{Response}: Updated event object
+
+\subsubsection{DELETE /api/events/:eventId}
+\textbf{Description}: Delete event (creator or admin only)
+
+\textbf{Response}: Success message
+
+\subsubsection{POST /api/events/:eventId/register}
+\textbf{Description}: Register for event
+
+\textbf{Response}: Updated event object
+
+\subsubsection{DELETE /api/events/:eventId/register}
+\textbf{Description}: Unregister from event
+
+\textbf{Response}: Updated event object
+
+\section{Appendix B: Environment Variables}
+
+\subsection{Backend Environment Variables}
+\begin{lstlisting}
+MONGODB_URI=mongodb+srv://...
+SESSION_SECRET=random-secret-key
+NODE_ENV=production
+FRONTEND_URL=https://your-frontend.vercel.app
+PORT=5000
+\end{lstlisting}
+
+\subsection{Frontend Environment Variables}
+\begin{lstlisting}
+VITE_API_URL=https://your-backend.onrender.com
+\end{lstlisting}
+
+\section{Appendix C: Deployment Checklist}
+
+\subsection{Pre-Deployment}
+\begin{itemize}
+\item[$\square$] All tests passing
+\item[$\square$] Code reviewed and approved
+\item[$\square$] Documentation updated
+\item[$\square$] Environment variables configured
+\item[$\square$] Database migrations completed
+\item[$\square$] Security audit completed
+\end{itemize}
+
+\subsection{Deployment}
+\begin{itemize}
+\item[$\square$] Frontend deployed to Vercel
+\item[$\square$] Backend deployed to Render
+\item[$\square$] Database configured on MongoDB Atlas
+\item[$\square$] SSL certificates active
+\item[$\square$] CORS configured correctly
+\item[$\square$] DNS records updated
+\end{itemize}
+
+\subsection{Post-Deployment}
+\begin{itemize}
+\item[$\square$] Smoke tests completed
+\item[$\square$] Monitoring configured
+\item[$\square$] Logging verified
+\item[$\square$] Performance metrics baseline established
+\item[$\square$] Backup strategy implemented
+\item[$\square$] Rollback plan documented
+\end{itemize}
+
+\section{Appendix D: Contact Information}
+
+\subsection{Development Team}
+\begin{itemize}
+\item \textbf{Project Lead}: ThinkCraft Lab Team
+\item \textbf{Email}: support@thinkcraftlab.com
+\item \textbf{Website}: https://thinkcraftlab.com
+\end{itemize}
+
+\subsection{Support}
+\begin{itemize}
+\item \textbf{Technical Support}: tech@thinkcraftlab.com
+\item \textbf{Business Inquiries}: business@thinkcraftlab.com
+\item \textbf{Phone}: +91 123 456 7890
+\end{itemize}
+
+\end{document}
