@@ -1,0 +1,210 @@
+\documentclass[10pt]{article}
+\usepackage[a4paper, margin=0.6in]{geometry}
+\usepackage{graphicx}
+\usepackage[bookmarks=true]{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage{enumitem}
+\setlist{noitemsep, topsep=0pt, leftmargin=*}
+\usepackage{titlesec}
+\titlespacing*{\section}{0pt}{8pt}{4pt}
+\titlespacing*{\subsection}{0pt}{6pt}{3pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+
+\hypersetup{colorlinks=true, linkcolor=blue, urlcolor=purple}
+\title{\textbf{SOFTWARE REQUIREMENTS SPECIFICATION\\ThinkCraft Lab\\3D Printing E-commerce \& Events Platform}}
+\author{ThinkCraft Lab Development Team}
+\date{\today}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Introduction}
+
+\subsection{Purpose}
+ThinkCraft Lab is a full-stack web platform combining 3D printing e-commerce with events management for students and makers. It enables product browsing/purchasing, order tracking, and community engagement through workshops, competitions, and courses.
+
+\subsection{Scope}
+\textbf{E-commerce}: 50+ products, cart, wishlist, checkout with coupons (10-25\% off), order management\\
+\textbf{Events}: Create/manage workshops/competitions/courses, registration tracking, live event indicators\\
+\textbf{Users}: Authentication, profiles, role-based access (Guest, Customer, Event Creator, Admin)\\
+\textbf{Admin}: Dashboard with statistics, event/user management
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=13cm]{system_architecture.png}
+\caption{System Architecture}
+\end{figure}
+
+\subsection{Audience}
+Developers, project managers, QA teams, stakeholders, end users.
+
+\section{System Overview}
+
+\subsection{Architecture}
+\textbf{Frontend}: React 18 + TypeScript + Vite + Tailwind CSS + Framer Motion\\
+\textbf{Backend}: Node.js + Express.js REST API + Session Auth\\
+\textbf{Database}: MongoDB + Mongoose ODM\\
+\textbf{Deployment}: Vercel (frontend), Render (backend), MongoDB Atlas
+
+\subsection{User Roles}
+\textbf{Guest}: Browse products/events, view public pages\\
+\textbf{Customer}: Purchase, register for events, manage profile\\
+\textbf{Event Creator}: Create/manage events, view registrations\\
+\textbf{Admin}: Full access, analytics, manage all content
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=14cm]{user_flow.png}
+\caption{User Roles and Capabilities}
+\end{figure}
+
+\subsection{Constraints}
+Tech stack: React, Node.js, Express, MongoDB, TypeScript required. Session-based auth with bcrypt. HTTPS in production. Performance: Page load <3s, API <500ms, 100+ concurrent users.
+
+\section{Functional Requirements}
+
+\subsection{Authentication (Priority: High)}
+\begin{itemize}
+\item User registration: username, email, password (min 6 chars), bcrypt hashing
+\item Secure login with 7-day session persistence
+\item Profile management, password updates, role-based access control
+\end{itemize}
+
+\subsection{E-commerce (Priority: High)}
+\textbf{Catalog}: 50+ products, 3 categories (3D Printing, Design Services, Prototyping), pagination (9/page), filtering\\
+\textbf{Cart}: Add/remove items, size selection, quantity updates, persistent storage, total calculation\\
+\textbf{Wishlist}: Save favorites, move to cart, prevent duplicates\\
+\textbf{Checkout}: Shipping info, payment methods (Credit Card, PayPal, COD), coupon system\\
+\textbf{Coupons}: FIRST10 (10\%), SAVE15 (15\%), MEGA25 (25\%), TEST10 (10\%)\\
+\textbf{Orders}: Unique order numbers, status tracking (pending/processing/shipped/delivered), order history
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=13cm]{ecommerce_workflow.png}
+\caption{E-commerce Workflow}
+\end{figure}
+
+\subsection{Events Management (Priority: High)}
+\textbf{Creation}: Title, description, category (Workshop/Competition/Course/Other), images, date, location, live status\\
+\textbf{Discovery}: Browse all, filter by category, view live events, registration counts\\
+\textbf{Registration}: One-click register/unregister, prevent duplicates, attendance tracking\\
+\textbf{Management}: Edit/delete own events, view registrations, admin manages all
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=13cm]{events_workflow.png}
+\caption{Events Management Workflow}
+\end{figure}
+
+\subsection{Admin Functions (Priority: High)}
+Dashboard: Total users, events, registrations, live events. View/delete any event. View all registrations. User management via scripts.
+
+\section{Database Design}
+
+\subsection{Collections}
+\textbf{Users}: \_id, username*, email*, password (hashed), isAdmin, createdAt (*unique)\\
+\textbf{Orders}: \_id, userId, orderNumber*, status, subtotal, discount, couponCode, totalAmount, shipping (address, city, state, zip, country), paymentMethod, items[], createdAt\\
+\textbf{Events}: \_id, title, description, category, images[], date, location, isLive, createdBy, createdByUsername, registrations[{userId, username, registeredAt}], timestamps
+
+\subsection{Relationships}
+Users (1)→(Many) Orders | Users (1)→(Many) Events (creator) | Users (Many)↔(Many) Events (registrations)
+
+\subsection{Indexes}
+Users: username, email | Orders: userId, orderNumber, createdAt | Events: category, isLive, date, createdBy
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=14cm]{database_schema.png}
+\caption{Database Schema (ER Diagram)}
+\end{figure}
+
+\section{System Architecture}
+
+\subsection{Three-Tier Design}
+\textbf{Presentation}: React SPA, Tailwind CSS, Wouter routing, TanStack Query, Framer Motion/GSAP animations\\
+\textbf{Application}: Express.js API, session auth, business logic, validation, error handling\\
+\textbf{Data}: MongoDB, Mongoose ODM, indexed collections, schema validation
+
+\subsection{Components}
+\textbf{Frontend}: Pages (Home, Shop, Work, About, Students, Profile, Admin), Layouts (Navigation, Footer), Features (Cart, Wishlist, Checkout, Events), Contexts (Auth, Shop)\\
+\textbf{Backend}: Routes (Auth, Orders, Events, Users, Admin), Models (User, Order, Event), Storage layer, Middleware (Auth, CORS, Error)
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=14cm]{component_diagram.png}
+\caption{Component Architecture}
+\end{figure}
+
+\section{Non-Functional Requirements}
+
+\subsection{Performance}
+Page load <3s, API <500ms (95\%), 100+ concurrent users, 1000+ req/min. Frontend bundle <2MB, backend memory <512MB. Optimized images, lazy loading, database indexes.
+
+\subsection{Security}
+Bcrypt hashing (10 rounds), session auth (7-day timeout), HTTPS, secure cookies. Input validation (client \& server), XSS/CSRF protection. Role-based access, environment variables for secrets.
+
+\subsection{Reliability}
+99\% uptime, graceful error handling, user-friendly messages, server logging. Database integrity, atomic transactions.
+
+\subsection{Usability}
+Registration <2min, purchase <5min. Responsive (320px-2560px), keyboard navigable, WCAG 2.1 AA contrast. Touch targets 44x44px on mobile.
+
+\subsection{Maintainability}
+TypeScript, modular code, inline comments, consistent naming. API/DB documentation, deployment guides. Unit/integration tests.
+
+\section{API Endpoints}
+
+\textbf{Auth}: POST /api/auth/signup, POST /api/auth/login, POST /api/auth/logout, GET /api/auth/me\\
+\textbf{Orders}: POST /api/orders, GET /api/orders, GET /api/orders/:orderId\\
+\textbf{Events}: GET /api/events, POST /api/events, GET /api/events/:eventId, PUT /api/events/:eventId, DELETE /api/events/:eventId, POST /api/events/:eventId/register, DELETE /api/events/:eventId/register\\
+\textbf{User}: PUT /api/user/profile, PUT /api/user/password\\
+\textbf{Admin}: GET /api/admin/stats
+
+\section{Deployment \& Testing}
+
+\subsection{Production Deployment}
+\textbf{Vercel (Frontend)}: Build: npm run build, Output: dist/public, Env: VITE\_API\_URL\\
+\textbf{Render (Backend)}: Build: npm install, Start: npm start, Env: MONGODB\_URI, SESSION\_SECRET, NODE\_ENV=production, FRONTEND\_URL\\
+\textbf{MongoDB Atlas}: M0 Free (512MB), replica sets, network access: all IPs, auto backups
+
+\subsection{Maintenance}
+Monitor performance/uptime, review logs weekly. Update dependencies monthly, security patches promptly. DB backups weekly, archive old orders (2+ years).
+
+\subsection{Testing Strategy}
+\textbf{Unit}: Individual functions, mock dependencies, 70\%+ coverage\\
+\textbf{Integration}: API endpoints, DB operations, auth flow\\
+\textbf{E2E}: Complete workflows (shopping, checkout, events)\\
+\textbf{Performance}: Load (100 users), stress testing\\
+\textbf{Security}: SQL injection, XSS, CSRF, auth bypass
+
+\textbf{Key Test Cases}: Auth (register, login, logout, password change), E-commerce (browse, cart, coupon, checkout, orders), Events (create, edit, delete, register), Admin (dashboard, stats, management)
+
+\section{Future Enhancements}
+
+\subsection{Phase 2}
+Payment gateway (Stripe, PayPal), advanced search with filters, product reviews/ratings, email notifications (orders, shipping, events)
+
+\subsection{Phase 3}
+Real-time chat support, analytics dashboard, social features (share, social login), native mobile apps (iOS/Android) with push notifications
+
+\subsection{Technical}
+Redis caching, service workers, WebP images, 2FA, rate limiting, CAPTCHA, microservices, load balancing, message queues
+
+\section{Appendix}
+
+\subsection{Tech Stack}
+\textbf{Frontend}: React 18.3.1, TypeScript 5.6.3, Vite 5.4.20, Tailwind 3.4.17, Framer Motion 11.13.1, GSAP 3.13.0, Wouter 3.3.5, TanStack Query 5.60.5\\
+\textbf{Backend}: Node.js 18+, Express 4.21.2, MongoDB 5.0+, Mongoose 9.1.3, bcryptjs 3.0.3, express-session 1.18.1\\
+\textbf{Deploy}: Vercel, Render, MongoDB Atlas
+
+\subsection{Environment Variables}
+\textbf{Backend}: MONGODB\_URI, SESSION\_SECRET, NODE\_ENV, FRONTEND\_URL, PORT\\
+\textbf{Frontend}: VITE\_API\_URL
+
+\subsection{Contact}
+Email: support@thinkcraftlab.com | Website: https://thinkcraftlab.com | Tech Support: tech@thinkcraftlab.com | Phone: +91 123 456 7890
+
+\end{document}
