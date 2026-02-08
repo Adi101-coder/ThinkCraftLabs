@@ -1,0 +1,42 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{float}
+
+\title{Data Flow Diagrams\\ThinkCraftLabs Platform}
+\author{ThinkCraftLabs Team}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{DFD Level 0 - Context Diagram}
+The Context Diagram shows ThinkCraftLabs as a single system interacting with external entities: Customers/Students who use the platform for shopping and event registration, Administrators who manage the system, and the Payment Gateway for transaction processing.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{dfd_level0.png}
+    \caption{DFD Level 0 - Context Diagram}
+\end{figure}
+
+\section{DFD Level 1 - Process Decomposition}
+The Level 1 DFD breaks down the system into six major processes: Authentication \& User Management (1.0), Product \& Shopping Management (2.0), Order Processing (3.0), Event Management (4.0), Event Registration (5.0), and Admin Operations (6.0). These processes interact with four data stores: Users Database (D1), Orders Database (D2), Events Database (D3), and Session Store (D4).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{dfd_level1.png}
+    \caption{DFD Level 1 - Major Processes}
+\end{figure}
+
+\section{DFD Level 2 - Authentication \& User Management}
+The Level 2 DFD provides detailed decomposition of Process 1.0 (Authentication \& User Management), showing the internal sub-processes: User Signup (1.1), User Login (1.2), Session Management (1.3), Profile Update (1.4), and Password Management (1.5). This diagram illustrates how user authentication and account management operations interact with the Users Database and Session Store.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{dfd_level2.png}
+    \caption{DFD Level 2 - Authentication \& User Management Details}
+\end{figure}
+
+\end{document}
