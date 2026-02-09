@@ -1,0 +1,234 @@
+\documentclass{scrreprt}
+\usepackage{listings}
+\usepackage{underscore}
+\usepackage{graphicx}
+\usepackage[bookmarks=true]{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\hypersetup{
+    bookmarks=false,
+    pdftitle={Software Requirement Specification},
+    pdfauthor={Adit Katiyar},
+    pdfsubject={ThinkCraftLabs Platform},
+    pdfkeywords={E-commerce, Events, 3D Printing, Web Application},
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=black,
+    filecolor=black,
+    urlcolor=purple,
+    linktoc=page
+}
+\def\myversion{1.0 }
+\date{}
+
+\begin{document}
+
+\begin{flushright}
+    \rule{16cm}{5pt}\vskip1cm
+    \begin{bfseries}
+        \Huge{SOFTWARE REQUIREMENTS\\ SPECIFICATION}\\
+        \vspace{1.5cm}
+        for\\
+        \vspace{1.5cm}
+        THINKCRAFTLABS PLATFORM\\
+        \vspace{1.5cm}
+        \LARGE{Version \myversion}\\
+        \vspace{1.5cm}
+        Prepared by : Adit Katiyar\\
+        Registration No: 23FE10CDS00073\\
+        \vspace{1.5cm}
+        Submitted to : Dr. Chirag Joshi\\
+        \vspace{1.5cm}
+        \today\\
+    \end{bfseries}
+\end{flushright}
+
+\tableofcontents
+
+\chapter{Introduction}
+
+\section{Purpose}
+Managing an e-commerce platform combined with an events management system manually is extremely challenging. Product catalogs need constant updates, orders must be tracked, inventory managed, and customer data maintained securely. Similarly, organizing workshops, competitions, and courses requires handling registrations, tracking participants, and managing event details efficiently. "ThinkCraftLabs Platform" is the comprehensive solution.
+
+ThinkCraftLabs is a full-stack web application that integrates e-commerce functionality for 3D printing products with an advanced events management system. The main concept is to digitalize the entire workflow - from product browsing and purchasing to event creation and registration, providing a seamless experience for customers, students, event creators, and administrators.
+
+\section{Intended Audience and Reading Suggestions}
+This SRS is for developers, project managers, users, and testers. The document provides comprehensive information about the system's internal architecture, external interfaces, functional capabilities, and non-functional requirements for the ThinkCraftLabs platform.
+
+\section{Project Scope}
+ThinkCraftLabs creates an integrated ecosystem for customers, students, event creators, and administrators to interact with 3D printing products and educational events.
+
+After registration, users receive authentication credentials allowing them to access the platform. They can browse a catalog of 50+ products across three categories (3D Printing, Design Services, Prototyping), add items to cart with size and quantity selection, apply discount coupons (10-25\% off), and complete secure checkout with multiple payment options.
+
+The events system enables authenticated users to create workshops, competitions, and courses with detailed information. Users can register for events with one-click sign-up, track their registrations, and event creators can manage their events and view participant lists.
+
+Administrators monitor platform statistics including total users, events, and registrations. They have full access to manage all events and view comprehensive system metrics through a dedicated dashboard.
+
+\begin{figure}
+\centering
+\includegraphics[width=12cm]{images/user_flow.png}
+\caption{User Roles and System Workflow}
+\label{fig:user_flow}
+\end{figure}
+
+Figure 1.1 shows the overview of the platform. The connection between all entities demonstrates the interactive nature of the system. Customers browse products and place orders; Event creators organize workshops and courses; Students register for events; Administrators oversee the entire platform.
+
+\chapter{Overall Description}
+
+\section{Product Perspective}
+ThinkCraftLabs is a modern replacement for traditional manual e-commerce and event management processes. Instead of maintaining spreadsheets, paper records, and separate systems, this platform consolidates everything into a unified web application. The main goal is to minimize manual work and maximize efficiency in managing products, orders, events, and user interactions.
+
+\section{User Classes and Characteristics}
+ThinkCraftLabs has basically 4 types of users:
+\begin{itemize}
+\item Guest Users
+\item Registered Customers
+\item Event Creators
+\item Administrators
+\end{itemize}
+
+Guest users can browse products and events without authentication. Registered customers gain full access to shopping, ordering, and event registration features. Event creators have additional permissions to create and manage their own events. Administrators have complete system access including platform statistics and content management.
+
+\begin{figure}
+\centering
+\includegraphics[width=10cm]{images/user_flow.png}
+\caption{Types of Users and Their Capabilities}
+\label{fig:user_types}
+\end{figure}
+
+\section{Product Functions}
+ThinkCraftLabs stores and manages all product information, orders, events, and user data in a MongoDB database. The platform supports multiple workflows for different user types.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=13cm]{images/e-com_workflow.png}
+\caption{E-commerce and Events Data Flow}
+\label{fig:data_flow}
+\end{figure}
+
+Before using the main functions, users must register and authenticate.
+
+All users have: user\_id, username, email, password\_hash (bcrypt encrypted), isAdmin (boolean), and createdAt (timestamp).
+
+Orders contain: order\_id, user\_id (foreign key), orderNumber (unique), status, items\_array (with productId, name, price, size, quantity), subtotal, discount, couponCode, totalAmount, shipping information (address, city, state, zip, country), paymentMethod, and createdAt.
+
+Events have: event\_id, title, description, category (workshop/competition/course/other), images\_array, date, location, isLive (boolean), createdBy (user\_id), createdByUsername, registrations\_array (with userId, username, registeredAt), createdAt, and updatedAt.
+
+Each product has: product\_id, name, description, price, category, image, sizes\_array, and specifications.
+
+\section{Operating Environment}
+The platform operates in any modern web browser environment - Chrome, Firefox, Safari, Edge on Windows, macOS, or Linux operating systems. The responsive design adapts to desktop, tablet, and mobile devices.
+
+\section{Design}
+
+\textbf{Customer Activities} have 3 main workflows:
+\begin{itemize}
+\item Product Browsing and Shopping
+\item Checkout and Order Placement
+\item Order Tracking and History
+\end{itemize}
+
+Customers browse the product catalog with pagination (9 products per page) and category filtering. They add products to cart with size selection, apply coupon codes during checkout, and complete purchases with shipping information and payment method selection. After order placement, they receive unique order numbers and can track order status through their profile.
+
+Every customer profile contains personal information, complete order history with status tracking, event registrations, and notification preferences.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=13cm]{images/e-com_workflow.png}
+\caption{Customer Shopping Activities}
+\label{fig:customer_activities}
+\end{figure}
+
+\newpage
+
+\textbf{Event Creator Activities} have 2 main workflows:
+\begin{itemize}
+\item Event Creation and Management
+\item Registration Tracking
+\end{itemize}
+
+Event creators can create new events with complete details including title, description, category, images, date, location, and live status. They can edit their own events, delete them if necessary, and view complete registration lists showing all participants with registration timestamps.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=10cm]{images/system_components.png}
+\caption{Event Management Activities}
+\label{fig:event_activities}
+\end{figure}
+
+\textbf{Administrator Activities} include:
+\begin{itemize}
+\item Platform Statistics Monitoring
+\item Event Management
+\item User Oversight
+\end{itemize}
+
+Administrators access a dedicated dashboard showing total users, total events, total registrations, and live events count. They can view all events in a comprehensive table, manage any event regardless of creator, and access detailed registration information.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=10cm]{images/system_components.png}
+\caption{Administrator Dashboard}
+\label{fig:admin_activities}
+\end{figure}
+
+\chapter{System Features}
+ThinkCraftLabs is a comprehensive platform combining e-commerce and events management. The main features enable product sales, order processing, event creation, and registration management.
+
+\section{Description and Priority}
+ThinkCraftLabs features are organized by priority from highest to lowest:
+
+\begin{enumerate}
+\item Authentication \& User Management: Core feature enabling secure access. Users register with username, email, and password (bcrypt hashed). Session-based authentication with 7-day persistence. Profile management for updating personal information.
+
+\item Product Catalog \& Shopping: Displays 50+ products with images, descriptions, and pricing. Category filtering and pagination. Shopping cart with size selection and quantity management. Wishlist functionality for saving favorite products.
+
+\item Order Processing: Secure checkout collecting shipping information and payment method. Coupon code validation (FIRST10, SAVE15, MEGA25, TEST10) with automatic discount calculation. Unique order number generation. Order history with status tracking (pending, processing, shipped, delivered).
+
+\item Event Management: Authenticated users create events with title, description, category, images, date, location, and live status. Event creators can edit and delete their own events. Administrators can manage all events.
+
+\item Event Registration: One-click registration for events with duplicate prevention. Unregistration capability. Registration tracking with participant lists showing usernames and timestamps.
+
+\item Admin Dashboard: Platform-wide statistics including user count, event count, total registrations, and live events. Comprehensive event management table. Access to all registration data.
+\end{enumerate}
+
+\section{Functional Requirements}
+The ThinkCraftLabs platform is built using modern web technologies:
+
+\textbf{Back-End:} Node.js runtime with Express.js framework for RESTful API. Session-based authentication using express-session with secure cookies. bcryptjs for password hashing with 10 salt rounds.
+
+\textbf{Front-End:} React 18 with TypeScript for type safety. Vite as build tool for fast development and optimized production builds. Tailwind CSS for responsive styling. Framer Motion and GSAP for animations. Wouter for client-side routing. TanStack Query for server state management.
+
+\textbf{Database:} MongoDB for document-based storage. Mongoose ODM for schema validation and query building. Indexed collections for optimal performance.
+
+\textbf{Deployment:} Vercel for frontend hosting with CDN. Render for containerized backend deployment. MongoDB Atlas for managed database with replica sets and automatic backups.
+
+\chapter{Other Nonfunctional Requirements}
+
+\section{Performance Requirements}
+ThinkCraftLabs must handle 100+ concurrent users efficiently. Page load times must not exceed 3 seconds on broadband connections. API response times must be under 500ms for 95\% of requests. Database queries are optimized with appropriate indexes. Frontend bundle size is kept under 2MB through code splitting and lazy loading.
+
+\section{Security Requirements}
+All passwords are hashed using bcrypt with 10 salt rounds before storage. Session tokens are securely generated with httpOnly and secure flags. HTTPS encryption is enforced in production. Role-based access control restricts features based on user roles. Input validation occurs on both client and server sides. CORS policies allow only authorized origins.
+
+\section{Software Quality Attributes}
+Throughout development, continuous testing and user feedback ensure quality standards are maintained. The system undergoes unit testing for individual functions, integration testing for API endpoints, and end-to-end testing for complete workflows.
+
+Database integrity is maintained through Mongoose schema validation and unique indexes. Logical correctness is verified through comprehensive test cases. UI/UX testing ensures responsive design and accessibility compliance.
+
+\section{Business Rules}
+ThinkCraftLabs serves as a comprehensive platform for selling 3D printing products and managing educational events. The system reduces manual workload, eliminates paper-based processes, and provides real-time tracking of orders and registrations. It enables scalable growth by handling increasing numbers of products, orders, events, and users efficiently.
+
+\chapter{Other Requirements}
+ThinkCraftLabs requires ongoing maintenance as it is a long-term platform. Regular updates will be needed for security patches, dependency updates, and feature enhancements. The system architecture supports refactoring and scaling as requirements evolve. Future enhancements may include payment gateway integration, email notifications, advanced search capabilities, product reviews, and mobile applications.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=13cm]{images/DB_schema .png}
+\caption{Database Schema and Relationships}
+\label{fig:db_schema}
+\end{figure}
+
+The database design supports all current features while allowing for future expansion. Users collection stores authentication and profile data. Orders collection maintains complete purchase history. Events collection handles event information and registrations. All collections are properly indexed for optimal query performance.
+
+\end{document}
